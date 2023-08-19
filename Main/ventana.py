@@ -207,6 +207,11 @@ class Ventana(Frame):
                     messagebox.showinfo("Eliminar", 'No se ha podido eliminar')                                
 
         pass
+    
+    def llenarDatosClientes(self):
+        datos = self.datos.consulta_cliente()
+        for d in datos:
+            self.grid.insert("", END, text=d[0], values=(d[1], d[2], d[3], d[4], d[5], d[6], d[7], d[8]))      
 
     def llenarDatosPronosticos(self):
         datos = self.datos.consulta_pronostico()
@@ -217,9 +222,7 @@ class Ventana(Frame):
         datos = self.datos.consulta_cuenta()
         for d in datos:
             if d[4] == 1:
-                self.grid.insert("", END, text=d[0], values=(d[1], d[2], d[3], 'Activo', d[5]))
-            if d[4] == 1:
-                self.grid.insert("", END, text=d[0], values=(d[1], d[2], d[3], 'Activo', d[5]))
+                self.grid.insert("", END, text=d[0], values=(d[1], d[2], d[3], 'Activo', d[5]))            
             else:
                 self.grid.insert("", END, text=d[0], values=(d[1],d[2],d[3],'Inactivo',d[5])) 
 
@@ -231,18 +234,19 @@ class Ventana(Frame):
         self.btnCliente = Button(frame1, text="Cliente", command=self.mostrarClientes, bg="#bfdaff", fg="black")
         self.btnCliente.place(x=30, y=2, width=80, height=30)
 
-        self.btnCuentas = Button(frame1, text="Cuentas Bancarias", command=self.mostrarCuentas, bg="#bfdaff",
-                                 fg="black")
+        self.btnCuentas = Button(frame1, text="Cuentas Bancarias", command=self.mostrarCuentas, bg="#bfdaff",fg="black")
         self.btnCuentas.place(x=130, y=2, width=130, height=30)
 
+        self.btnPronost = Button(frame1, text="Pronosticos", command = self.mostrasPronosticos, bg="#bfdaff", fg="black")
+        self.btnPronost.place(x=280,y=2,width=130, height=30)
+
         # Agregar un botón para editar cliente
-        self.btnEditarCliente = Button(frame1, text="Editar Cliente", command=self.editarCliente, bg="#bfdaff",
-                                       fg="black")
-        self.btnEditarCliente.place(x=280, y=2, width=100, height=30)
+        self.btnEditarCliente = Button(frame1, text="Editar Cliente", command=self.editarCliente, bg="#bfdaff",fg="black")
+        self.btnEditarCliente.place(x=450, y=2, width=100, height=30)
 
         # Agregar un botón para editar cuenta
-        #self.btnEditarCuenta = Button(frame1, text="Editar Cuenta", command=self.editarCuenta, bg="#bfdaff", fg="black")
-        #self.btnEditarCuenta.place(x=400, y=2, width=100, height=30)
+        self.btnEditarCuenta = Button(frame1, text="Editar Cuenta", command=self.editarCuenta, bg="#bfdaff", fg="black")
+        self.btnEditarCuenta.place(x=570, y=2, width=100, height=30)
 
 
     #Sheyla Ventana editar
