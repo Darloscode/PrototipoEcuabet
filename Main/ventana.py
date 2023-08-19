@@ -68,6 +68,12 @@ class Ventana(Frame):
         self.btnCuentas = Button(self, text="Eliminar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
         self.btnCuentas.place(x=350,y=250,width=170, height=30 )
 
+        self.btnCuentas = Button(self, text="Agregar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnCuentas.place(x=100,y=250,width=170, height=30 )
+
+        self.btnCuentas = Button(self, text="Editar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnCuentas.place(x=600,y=250,width=170, height=30 )
+
     def mostrarCuentas(self): 
 
         self.eliminarColumnasGrid()
@@ -241,12 +247,12 @@ class Ventana(Frame):
         self.btnPronost.place(x=280,y=2,width=130, height=30)
 
         # Agregar un botón para editar cliente
-        self.btnEditarCliente = Button(frame1, text="Editar Cliente", command=self.editarCliente, bg="#bfdaff",fg="black")
-        self.btnEditarCliente.place(x=450, y=2, width=100, height=30)
+        #self.btnEditarCliente = Button(frame1, text="Editar Cliente", command=self.editarCliente, bg="#bfdaff",fg="black")
+        #self.btnEditarCliente.place(x=450, y=2, width=100, height=30)
 
         # Agregar un botón para editar cuenta
-        self.btnEditarCuenta = Button(frame1, text="Editar Cuenta", command=self.editarCuenta, bg="#bfdaff", fg="black")
-        self.btnEditarCuenta.place(x=570, y=2, width=100, height=30)
+        #self.btnEditarCuenta = Button(frame1, text="Editar Cuenta", command=self.editarCuenta, bg="#bfdaff", fg="black")
+        #self.btnEditarCuenta.place(x=570, y=2, width=100, height=30)
 
 
     #Sheyla Ventana editar
