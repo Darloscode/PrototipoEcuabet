@@ -10,7 +10,9 @@ cedula char(10) not null,
 edad int not null check (edad>18), 
 ciudad_residencia varchar(25) not null,
 provincia_residencia varchar(25) not null, 
-email varchar(250) not null
+email varchar(250) not null,
+password varchar(10) not null,
+monto float not null default 0
 );
 
 create table cuenta_bancaria(
@@ -72,7 +74,7 @@ id_pronostico varchar(5) primary key not null,
 monto_apuesta float not null, 
 valor_multiplicativo float not null check(valor_multiplicativo>0), 
 ganancia float not null, 
-fecha_apuesta float not null , 
+fecha_apuesta date not null , 
 id_usuario varchar(5) not null ,
 id_enfrentamiento varchar(5) not null,
 foreign key (id_usuario) references cliente(id_usuario),
@@ -109,17 +111,17 @@ create table paradas(
 
 
 #Insertando datos en tabla Cliente
-INSERT INTO cliente (id_usuario, nombre, apellido, telefono, cedula, edad, ciudad_residencia, provincia_residencia, email) VALUES 
-    ('10001', 'Juan', 'Pérez', '5551234567', '1234567890', 25, 'Madrid', 'Madrid', 'juan.perez@example.com'),
-    ('10002', 'María', 'Gómez', '4449876543', '0987654321', 30, 'Barcelona', 'Barcelona', 'maria.gomez@example.com'),
-    ('10003', 'Carlos', 'Rodríguez', '3336549870', '1357924680', 22, 'Valencia', 'Valencia', 'carlos.rodriguez@example.com'),
-    ('10004', 'Laura', 'López', '2225678901', '8642097531', 28, 'Sevilla', 'Sevilla', 'laura.lopez@example.com'),
-    ('10005', 'Pedro', 'Martínez', '7772345678', '2468135790', 32, 'Málaga', 'Málaga', 'pedro.martinez@example.com'),
-    ('10006', 'Ana', 'Fernández', '6667890123', '0246813579', 20, 'Bilbao', 'Vizcaya', 'ana.fernandez@example.com'),
-    ('10007', 'Isabel', 'Ramírez', '8889012345', '9876543210', 27, 'Zaragoza', 'Zaragoza', 'isabel.ramirez@example.com'),
-    ('10008', 'David', 'Sánchez', '9993456789', '0123456789', 24, 'Alicante', 'Alicante', 'david.sanchez@example.com'),
-    ('10009', 'Paula', 'Torres', '1115678901', '9876543210', 29, 'Palma de Mallorca', 'Islas Baleares', 'paula.torres@example.com'),
-    ('10010', 'Sergio', 'Ortega', '2228901234', '1234567890', 26, 'Córdoba', 'Córdoba', 'sergio.ortega@example.com');
+INSERT INTO cliente (id_usuario, nombre, apellido, telefono, cedula, edad, ciudad_residencia, provincia_residencia, email, password) VALUES 
+    ('10001', 'Juan', 'Pérez', '5551234567', '1234567890', 25, 'Madrid', 'Madrid', 'juan.perez@example.com', '32149875'),
+    ('10002', 'María', 'Gómez', '4449876543', '0987654321', 30, 'Barcelona', 'Barcelona', 'maria.gomez@example.com', '98765432'),
+    ('10003', 'Carlos', 'Rodríguez', '3336549870', '1357924680', 22, 'Valencia', 'Valencia', 'carlos.rodriguez@example.com', '56789012'),
+    ('10004', 'Laura', 'López', '2225678901', '8642097531', 28, 'Sevilla', 'Sevilla', 'laura.lopez@example.com', '24681357'),
+    ('10005', 'Pedro', 'Martínez', '7772345678', '2468135790', 32, 'Málaga', 'Málaga', 'pedro.martinez@example.com', '13579246'),
+    ('10006', 'Ana', 'Fernández', '6667890123', '0246813579', 20, 'Bilbao', 'Vizcaya', 'ana.fernandez@example.com', '02468135'),
+    ('10007', 'Isabel', 'Ramírez', '8889012345', '9876543210', 27, 'Zaragoza', 'Zaragoza', 'isabel.ramirez@example.com',  '98765432'),
+    ('10008', 'David', 'Sánchez', '9993456789', '0123456789', 24, 'Alicante', 'Alicante', 'david.sanchez@example.com', '01234567'),
+    ('10009', 'Paula', 'Torres', '1115678901', '9876543210', 29, 'Palma de Mallorca', 'Islas Baleares', 'paula.torres@example.com', '98765432'),
+    ('10010', 'Sergio', 'Ortega', '2228901234', '1234567890', 26, 'Córdoba', 'Córdoba', 'sergio.ortega@example.com', '12345678');
 
 #Insertando datos en tabla cuenta_bancaria
 INSERT INTO cuenta_bancaria (num_cuenta, tipo_cuenta, cedula_dueño, banco, estado, id_usuario) VALUES 
@@ -317,4 +319,4 @@ INSERT INTO paradas (ID_SORTEO, cupon_ganador,fechasorteo, premio) VALUES
     (5,3,'2023-08-1','camiseta de argentina'),
     (5,1,'2023-08-17','camiseta de portugal'),
     (5,7,'2023-09-1','camiseta de brasil'),
-    (5,10,'2023-09-23','meet and great con messi');
+    (5,10,'2023-09-23','meet and great con messi');    

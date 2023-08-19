@@ -13,7 +13,8 @@ class Base:
         for row in datos:
             aux=aux + str(row) + "\n"
         return aux
-    
+
+    #Carlos 
     def consulta_cliente(self):
         sql = self.cnn.cursor()
         sql.execute("SELECT * FROM cliente")
@@ -24,6 +25,52 @@ class Base:
     def consulta_cuenta(self):
         sql = self.cnn.cursor()
         sql.execute("SELECT * FROM cuenta_bancaria")
+        datos = sql.fetchall()
+        sql.close()    
+        return datos
+    
+    def elimina_pronostico(self, id):
+        sql = self.cnn.cursor()
+        sql.execute("DELETE FROM pronostico_deportivo WHERE id_pronostico = " +"'" + id + "'")
+        cantidad = sql.rowcount
+        self.cnn.commit()     
+        sql.close()
+        return cantidad
+
+    def elimina_registro(self, id_cliente):
+        sql = self.cnn.cursor()
+        sql.execute("DELETE FROM movimiento_bancario WHERE id_usuario = "+id_cliente)
+        sql.execute("DELETE FROM cuenta_bancaria WHERE id_usuario = "+id_cliente)        
+        sql.execute("DELETE FROM pronostico_deportivo WHERE id_usuario = "+id_cliente)
+
+        sql.execute( "SELECT id_cupon FROM cupones WHERE nombreDeUsuario = "+id_cliente)
+        datos = sql.fetchall()
+        for i in datos:
+            elemento = str(i[0])
+            sql.execute("DELETE FROM paradas WHERE cupon_ganador = "+elemento)
+
+        sql.execute("DELETE FROM cupones WHERE nombreDeUsuario = "+id_cliente)
+        sql.execute("DELETE FROM cliente WHERE id_usuario = "+id_cliente)
+
+        cantidad = sql.rowcount
+        self.cnn.commit()     
+        sql.close()
+        return cantidad
+
+    def elimina_cuenta(self, cuenta):
+        sql = self.cnn.cursor()
+
+        sql.execute("DELETE FROM movimiento_bancario WHERE num_cuenta = " +"'" + cuenta + "'")
+        sql.execute("DELETE FROM cuenta_bancaria WHERE num_cuenta = " +"'" + cuenta + "'")                        
+
+        cantidad = sql.rowcount
+        self.cnn.commit()     
+        sql.close()        
+        return cantidad
+
+    def consulta_pronostico(self):
+        sql = self.cnn.cursor()
+        sql.execute("SELECT * FROM pronostico_deportivo")
         datos = sql.fetchall()
         sql.close()    
         return datos
