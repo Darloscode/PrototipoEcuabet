@@ -86,5 +86,110 @@ class Ventana(Frame):
 
         self.btnCuentas = Button(frame1, text="Cuentas Bancarias", command = self.mostrarCuentas, bg="#bfdaff", fg="black")
         self.btnCuentas.place(x=130,y=2,width=130, height=30 )
-        
-        
+
+    #Sheyla Ventana editar
+    #Cliente
+    def editarCliente(self):
+        # Obtener el ID del cliente seleccionado
+        selected_item = self.grid.selection()
+        if selected_item:
+            id_cliente = self.grid.item(selected_item)["text"]
+
+            # Obtener los detalles del cliente seleccionado
+            detalles_cliente = self.datos.obtener_detalle_cliente(id_cliente)
+
+            if detalles_cliente:
+                # Se crea una ventana emergente para editar
+                ventana_editar = Toplevel(self)
+                ventana_editar.title("Editar Cliente")
+
+                # Se agrega campos de entrada para editar detalles
+                Label(ventana_editar, text="Nombre:").pack()
+                nuevo_nombre = Entry(ventana_editar)
+                nuevo_nombre.insert(0, detalles_cliente[1])
+                nuevo_nombre.pack()
+
+                Label(ventana_editar, text="Apellido:").pack()
+                nuevo_apellido = Entry(ventana_editar)
+                nuevo_apellido.insert(0, detalles_cliente[2])
+                nuevo_apellido.pack()
+
+                # Botón para guardar los cambios
+                boton_guardar = Button(ventana_editar, text="Guardar Cambios",
+                                       command=lambda: self.guardarCambiosCliente(id_cliente, nuevo_nombre.get(),nuevo_apellido.get()))
+                boton_guardar.pack()
+
+    def guardarCambiosCliente(self, id_cliente, nuevo_nombre, nuevo_apellido):
+        # Se realizar la actualización en la base de datos
+        self.datos.actualizar_cliente(id_cliente, nuevo_nombre, nuevo_apellido)
+
+        # Se actualiza la vista de la tabla de clientes
+        self.mostrarClientes()
+
+
+
+    #Cuenta Bancaria
+    def editarCuenta(self):
+        selected_item = self.grid.selection()
+        if selected_item:
+            num_cuenta = self.grid.item(selected_item)["text"]
+            detalles_cuenta = self.datos.obtener_detalle_cuenta(num_cuenta)
+
+            if detalles_cuenta:
+                ventana_editar = Toplevel(self)
+                ventana_editar.title("Editar Cuenta Bancaria")
+
+                Label(ventana_editar, text="Tipo de Cuenta:").pack()
+                nuevo_tipo = Entry(ventana_editar)
+                nuevo_tipo.insert(0, detalles_cuenta[1])
+                nuevo_tipo.pack()
+
+                Label(ventana_editar, text="Banco:").pack()
+                nuevo_banco = Entry(ventana_editar)
+                nuevo_banco.insert(0, detalles_cuenta[3])
+                nuevo_banco.pack()
+
+                # ... Agregar campos para otros detalles
+
+                boton_guardar = Button(ventana_editar, text="Guardar Cambios",
+                                       command=lambda: self.guardarCambiosCuenta(num_cuenta, nuevo_tipo.get(),
+                                                                                 nuevo_banco.get()))
+                boton_guardar.pack()
+
+    def guardarCambiosCuenta(self, num_cuenta, nuevo_tipo, nuevo_banco):
+        self.datos.actualizar_cuenta(num_cuenta, nuevo_tipo, nuevo_banco)
+        self.mostrarCuentas()
+
+
+    #MOVIMIENTO BANCARIO
+    def editarMovimiento(self):
+        selected_item = self.grid.selection()
+        if selected_item:
+            num_movimiento = self.grid.item(selected_item)["text"]
+            detalles_movimiento = self.datos.obtener_detalle_movimiento(num_movimiento)
+
+            if detalles_movimiento:
+                ventana_editar = Toplevel(self)
+                ventana_editar.title("Editar Movimiento Bancario")
+
+                Label(ventana_editar, text="Tipo de Movimiento:").pack()
+                nuevo_tipo = Entry(ventana_editar)
+                nuevo_tipo.insert(0, detalles_movimiento[1])
+                nuevo_tipo.pack()
+
+                Label(ventana_editar, text="Monto:").pack()
+                nuevo_monto = Entry(ventana_editar)
+                nuevo_monto.insert(0, detalles_movimiento[3])
+                nuevo_monto.pack()
+
+                # ... Agregar campos para otros detalles
+
+                boton_guardar = Button(ventana_editar, text="Guardar Cambios",
+                                       command=lambda: self.guardarCambiosMovimiento(num_movimiento, nuevo_tipo.get(),
+                                                                                     nuevo_monto.get()))
+                boton_guardar.pack()
+
+    def guardarCambiosMovimiento(self, num_movimiento, nuevo_tipo, nuevo_monto):
+        self.datos.actualizar_movimiento(num_movimiento, nuevo_tipo, nuevo_monto)
+        self.mostrarMovimientos()
+
