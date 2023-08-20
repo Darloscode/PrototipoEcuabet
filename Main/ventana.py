@@ -268,7 +268,7 @@ class Ventana(Frame):
 
         self.btnPronost = Button(frame1, text="Pronosticos", command = self.mostrasPronosticos, bg="#bfdaff", fg="black")
         self.btnPronost.place(x=280,y=2,width=130, height=30)
-
+""""
         # sheyla
         #self.btnEditarCliente = Button(frame1, text="Editar Cliente", command=self.editarCliente, bg="#bfdaff",fg="black")
         #self.btnEditarCliente.place(x=450, y=2, width=100, height=30)
@@ -302,7 +302,8 @@ class Ventana(Frame):
         self.btnGuardarCliente = Button(self, text="Guardar Cambios Cliente", command=self.guardarCambiosCliente,
                                         bg="#bfdaff", fg="black")
         self.btnGuardarCliente.place(x=30, y=290, width=200, height=30)
-
+"""
+"""
         # Sheyla
         self.btnEditarCuenta = Button(frame1, text="Editar Cuenta", command=self.editarCuenta, bg="#bfdaff", fg="black")
         self.btnEditarCuenta.place(x=570, y=2, width=100, height=30)
@@ -419,3 +420,18 @@ class Ventana(Frame):
             self.entry_tipo_cuenta.insert(0, valores[1])
             self.entry_cedula.delete(0, END)
             self.entry_cedula.insert(0, valores[2])
+
+    def guardarCambiosCuenta(self):
+        if self.editando_cuenta:
+            nuevos_datos_cuenta = {
+                "tipo_cuenta": self.entry_tipo_cuenta.get(),
+                "cedula": self.entry_cedula.get(),
+                # Agrega más atributos de la cuenta bancaria
+            }
+            self.datos.editar_cuenta(self.editando_cuenta, nuevos_datos_cuenta)
+            self.editando_cuenta = None
+            self.limpiarGrid()  # Actualiza la vista de cuentas bancarias
+            self.mostrarCuentas()
+
+"""
+
