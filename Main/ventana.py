@@ -268,6 +268,122 @@ class Ventana(Frame):
 
         self.btnPronost = Button(frame1, text="Pronosticos", command = self.mostrasPronosticos, bg="#bfdaff", fg="black")
         self.btnPronost.place(x=280,y=2,width=130, height=30)
+
+#luis
+    def mostrarVentanaAgregarCliente(self):
+        ventana_agregar = Toplevel(self.master)
+        ventana_agregar.title("Agregar Cliente")
+        ventana_agregar.geometry("400x300")
+
+        lbl_id = Label(ventana_agregar, text="ID:")
+        lbl_id.pack()
+        entry_id = Entry(ventana_agregar)
+        entry_id.pack()
+
+        lbl_nombre = Label(ventana_agregar, text="Nombre:")
+        lbl_nombre.pack()
+        entry_nombre = Entry(ventana_agregar)
+        entry_nombre.pack()
+
+        lbl_apellido = Label(ventana_agregar, text="Apellido:")
+        lbl_apellido.pack()
+        entry_apellido = Entry(ventana_agregar)
+        entry_apellido.pack()
+
+        lbl_telefono = Label(ventana_agregar, text="Teléfono:")
+        lbl_telefono.pack()
+        entry_telefono = Entry(ventana_agregar)
+        entry_telefono.pack()
+
+        lbl_cedula = Label(ventana_agregar, text="Cédula:")
+        lbl_cedula.pack()
+        entry_cedula = Entry(ventana_agregar)
+        entry_cedula.pack()
+
+        lbl_edad = Label(ventana_agregar, text="Edad:")
+        lbl_edad.pack()
+        entry_edad = Entry(ventana_agregar)
+        entry_edad.pack()
+
+        lbl_ciudad = Label(ventana_agregar, text="Ciudad:")
+        lbl_ciudad.pack()
+        entry_ciudad = Entry(ventana_agregar)
+        entry_ciudad.pack()
+
+        lbl_provincia = Label(ventana_agregar, text="Provincia:")
+        lbl_provincia.pack()
+        entry_provincia = Entry(ventana_agregar)
+        entry_provincia.pack()
+
+        lbl_email = Label(ventana_agregar, text="Email:")
+        lbl_email.pack()
+        entry_email = Entry(ventana_agregar)
+        entry_email.pack()
+
+        lbl_contrasena = Label(ventana_agregar, text="Contraseña:")
+        lbl_contrasena.pack()
+        entry_contrasena = Entry(ventana_agregar)
+        entry_contrasena.pack()
+
+        lbl_monto = Label(ventana_agregar, text="Monto:")
+        lbl_monto.pack()
+        entry_monto = Entry(ventana_agregar)
+        entry_monto.pack()
+
+        btn_guardar = Button(ventana_agregar, text="Guardar", command=lambda: self.guardarNuevoCliente(entry_id.get(), entry_nombre.get(), entry_apellido.get(), entry_telefono.get(),entry_cedula.get(), int(entry_edad.get()),entry_ciudad.get(), entry_provincia.get(), entry_email.get(),entry_contrasena.get(), float(entry_monto.get())))
+        btn_guardar.pack()
+
+        
+    def guardarNuevoCliente(self, id_usuario, nombre, apellido, telefono, cedula, edad, ciudad, provincia, email, contrasena, monto):
+        self.datos.insertar_cliente(id_usuario, nombre, apellido, telefono, cedula, int(edad), ciudad, provincia, email, contrasena, float(monto))
+        self.mostrarClientes()
+        if self.ventana_agregar:
+            self.ventana_agregar.destroy()
+
+    def mostrarVentanaAgregarCuenta(self):
+        ventana_agregar_cuenta = Toplevel(self.master)
+        ventana_agregar_cuenta.title("Agregar Cuenta")
+        ventana_agregar_cuenta.geometry("400x300")
+
+        lbl_numero_cuenta = Label(ventana_agregar_cuenta, text="Número de Cuenta:")
+        lbl_numero_cuenta.pack()
+
+        entry_numero_cuenta = Entry(ventana_agregar_cuenta)
+        entry_numero_cuenta.pack()
+
+        lbl_tipo_cuenta = Label(ventana_agregar_cuenta, text="Tipo de Cuenta:")
+        lbl_tipo_cuenta.pack()
+
+        entry_tipo_cuenta = Entry(ventana_agregar_cuenta)
+        entry_tipo_cuenta.pack()
+
+        lbl_cedula = Label(ventana_agregar_cuenta, text="Cédula del Cliente:")
+        lbl_cedula.pack()
+
+        entry_cedula = Entry(ventana_agregar_cuenta)
+        entry_cedula.pack()
+
+        lbl_banco = Label(ventana_agregar_cuenta, text="Banco:")
+        lbl_banco.pack()
+
+        entry_banco = Entry(ventana_agregar_cuenta)
+        entry_banco.pack()
+
+        lbl_id_usuario = Label(ventana_agregar_cuenta, text="ID de Usuario:")
+        lbl_id_usuario.pack()
+
+        entry_id_usuario = Entry(ventana_agregar_cuenta)
+        entry_id_usuario.pack()
+
+        btn_agregar_cuenta = Button(ventana_agregar_cuenta, text="Agregar Cuenta", command=lambda: self.agregarCuenta(
+            entry_numero_cuenta.get(), entry_tipo_cuenta.get(), entry_cedula.get(), entry_banco.get(), entry_id_usuario.get()))
+        btn_agregar_cuenta.pack()
+
+    def agregarCuenta(self, numero_cuenta, tipo_cuenta, cedula_dueño, banco, id_usuario):
+        self.datos.insertar_cuenta(numero_cuenta, tipo_cuenta, cedula_dueño, banco, id_usuario)
+        self.mostrarCuentas()
+        if self.ventana_agregar_cuenta:
+            self.ventana_agregar_cuenta.destroy()
 """"
         # sheyla
         #self.btnEditarCliente = Button(frame1, text="Editar Cliente", command=self.editarCliente, bg="#bfdaff",fg="black")
