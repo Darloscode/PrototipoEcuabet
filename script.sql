@@ -320,3 +320,55 @@ INSERT INTO paradas (ID_SORTEO, cupon_ganador,fechasorteo, premio) VALUES
     (5,1,'2023-08-17','camiseta de portugal'),
     (5,7,'2023-09-1','camiseta de brasil'),
     (5,10,'2023-09-23','meet and great con messi');    
+
+USE proyecto;
+ALTER TABLE cliente
+ADD contrasena varchar(250),
+ADD monto float NOT NULL DEFAULT 0;
+
+UPDATE cliente
+SET contrasena = '32149875'
+WHERE id_usuario = '10001';
+
+UPDATE cliente
+SET contrasena = '98765432'
+WHERE id_usuario = '10002';
+
+UPDATE cliente
+SET contrasena = '56789012'
+WHERE id_usuario = '10003';
+
+UPDATE cliente
+SET contrasena = '24681357'
+WHERE id_usuario = '10004';
+
+UPDATE cliente
+SET contrasena = '13579246'
+WHERE id_usuario = '10005';
+
+UPDATE cliente
+SET contrasena = '02468135'
+WHERE id_usuario = '10006';
+
+UPDATE cliente
+SET contrasena = '98765432'
+WHERE id_usuario = '10007';
+
+UPDATE cliente
+SET contrasena = '01234567'
+WHERE id_usuario = '10008';
+
+UPDATE cliente
+SET contrasena = '98765432'
+WHERE id_usuario = '10009';
+
+UPDATE cliente
+SET contrasena = '12345678'
+WHERE id_usuario = '10010';
+
+ALTER TABLE cliente
+MODIFY contrasena VARCHAR(250) NOT NULL;
+
+use proyecto;
+INSERT INTO cliente (id_usuario, nombre, apellido, telefono, cedula, edad, ciudad_residencia, provincia_residencia, email,contrasena) VALUES 
+    ('1001', 'Luis', 'Cedeño', '6651234567', '0987654344', 25, 'Chone', 'Manabí', 'luis.cedeno@example.com','12345678')
