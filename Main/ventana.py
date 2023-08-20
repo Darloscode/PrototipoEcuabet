@@ -263,7 +263,7 @@ class Ventana(Frame):
 
         self.btnPronost = Button(frame1, text="Pronosticos", command = self.mostrasPronosticos, bg="#bfdaff", fg="black")
         self.btnPronost.place(x=280,y=2,width=130, height=30)
-
+""""
         # sheyla
         self.btnEditarCliente = Button(frame1, text="Editar Cliente", command=self.editarCliente, bg="#bfdaff",
                                        fg="black")
@@ -298,7 +298,8 @@ class Ventana(Frame):
         self.btnGuardarCliente = Button(self, text="Guardar Cambios Cliente", command=self.guardarCambiosCliente,
                                         bg="#bfdaff", fg="black")
         self.btnGuardarCliente.place(x=30, y=290, width=200, height=30)
-
+"""
+"""
         # Sheyla
         self.btnEditarCuenta = Button(frame1, text="Editar Cuenta", command=self.editarCuenta, bg="#bfdaff", fg="black")
         self.btnEditarCuenta.place(x=570, y=2, width=100, height=30)
@@ -401,3 +402,4 @@ class Ventana(Frame):
             self.limpiarGrid()  # Actualiza la vista de cuentas bancarias
             self.mostrarCuentas()
 
+"""
