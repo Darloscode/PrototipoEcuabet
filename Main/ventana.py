@@ -14,9 +14,15 @@ class Ventana(Frame):
         self.pack()
         self.create_widgets()      
         self.grid = ttk.Treeview(columns=("col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8"))
+        self.btnEliminar = Button(self, text="", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnEditar = Button(self, text="", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnAgregar = Button(self, text="", command = self.eliminarCliente, bg="#bfdaff", fg="black")
         
     def eliminarColumnasGrid(self):                  
-        self.grid.destroy()         
+        self.grid.destroy()
+        self.btnEliminar.destroy()
+        self.btnEditar.destroy()
+        self.btnAgregar.destroy()
 
     def limpiarGrid(self):
         for item in self.grid.get_children():
@@ -65,14 +71,14 @@ class Ventana(Frame):
 
         self.llenarDatosClientes()
 
-        self.btnCuentas = Button(self, text="Eliminar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
-        self.btnCuentas.place(x=350,y=250,width=170, height=30 )
+        self.btnEliminar = Button(self, text="Eliminar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnEliminar.place(x=350,y=250,width=170, height=30 )
 
-        self.btnCuentas = Button(self, text="Agregar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
-        self.btnCuentas.place(x=100,y=250,width=170, height=30 )
+        self.btnAgregar = Button(self, text="Agregar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnAgregar.place(x=100,y=250,width=170, height=30 )
 
-        self.btnCuentas = Button(self, text="Editar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
-        self.btnCuentas.place(x=600,y=250,width=170, height=30 )
+        self.btnEditar = Button(self, text="Editar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnEditar.place(x=600,y=250,width=170, height=30 )
 
     def mostrarCuentas(self): 
 
@@ -110,6 +116,12 @@ class Ventana(Frame):
         self.btnEliminar = Button(self, text="Eliminar", command = self.eliminarCuentaB, bg="#bfdaff", fg="black")
         self.btnEliminar.place(x=350,y=250,width=170, height=30 )
 
+        self.btnAgregar = Button(self, text="Agregar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnAgregar.place(x=100,y=250,width=170, height=30 )
+
+        self.btnEditar = Button(self, text="Editar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnEditar.place(x=600,y=250,width=170, height=30 )
+                
     def mostrasPronosticos(self):
 
         self.eliminarColumnasGrid()
@@ -138,6 +150,12 @@ class Ventana(Frame):
 
         self.btnEliminar = Button(self, text="Eliminar", command = self.eliminarPronostico, bg="#bfdaff", fg="black")
         self.btnEliminar.place(x=350,y=250,width=170, height=30 )
+
+        self.btnAgregar = Button(self, text="Agregar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnAgregar.place(x=100,y=250,width=170, height=30 )
+
+        self.btnEditar = Button(self, text="Editar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnEditar.place(x=600,y=250,width=170, height=30 )
 
         pass
 
