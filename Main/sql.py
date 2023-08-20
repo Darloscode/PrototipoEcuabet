@@ -119,6 +119,7 @@ class Base:
         except mysql.connector.Error as err:
             print(f"Error al agregar el cliente: {err}")
 
+
     def insertar_cuenta(self, tipo, cedula, banco, estado):
         try:
             sql = self.cnn.cursor()
