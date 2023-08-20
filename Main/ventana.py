@@ -1,6 +1,8 @@
+from distutils.dist import command_re
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+import tkinter as tk 
 from sql import *
 from tkinter import Toplevel, Label, Entry, Button
 
@@ -17,6 +19,9 @@ class Ventana(Frame):
         self.btnEliminar = Button(self, text="", command = self.eliminarCliente, bg="#bfdaff", fg="black")
         self.btnEditar = Button(self, text="", command = self.eliminarCliente, bg="#bfdaff", fg="black")
         self.btnAgregar = Button(self, text="", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnGuardarCliente = Button(self, text="Guardar Cambios Cliente", command=self.guardarCambiosCliente,
+                                        bg="#bfdaff", fg="black")
+        self.btnGuardarCliente.place(x=30, y=290, width=200, height=30)
         
     def eliminarColumnasGrid(self):                  
         self.grid.destroy()
@@ -77,7 +82,7 @@ class Ventana(Frame):
         self.btnAgregar = Button(self, text="Agregar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
         self.btnAgregar.place(x=100,y=250,width=170, height=30 )
 
-        self.btnEditar = Button(self, text="Editar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnEditar = Button(self, text="Editar", command = self.editarCliente, bg="#bfdaff", fg="black")
         self.btnEditar.place(x=600,y=250,width=170, height=30 )
 
     def mostrarCuentas(self): 
@@ -265,9 +270,8 @@ class Ventana(Frame):
         self.btnPronost.place(x=280,y=2,width=130, height=30)
 
         # sheyla
-        self.btnEditarCliente = Button(frame1, text="Editar Cliente", command=self.editarCliente, bg="#bfdaff",
-                                       fg="black")
-        self.btnEditarCliente.place(x=450, y=2, width=100, height=30)
+        #self.btnEditarCliente = Button(frame1, text="Editar Cliente", command=self.editarCliente, bg="#bfdaff",fg="black")
+        #self.btnEditarCliente.place(x=450, y=2, width=100, height=30)
 
         # -- Se agrega los campos de edición para clientes
         self.entry_nombre = Entry(self)
@@ -307,56 +311,84 @@ class Ventana(Frame):
         self.entry_tipo_cuenta = Entry(self)
         self.entry_tipo_cuenta.place(x=700, y=250, width=100, height=25)
 
-    def editarCliente(self):
-        seleccion = self.grid.selection()
-        if seleccion:
-            id_usuario = seleccion[0]
-            cliente = self.datos.obtener_cliente(id_usuario)
-            self.mostrarVentanaEdicionCliente(id_usuario, cliente)
+    def guardarCambiosCliente(self):
+        selected = self.grid.focus()
+        id_usuario = self.grid.item(selected, 'text')
+        
+        nuevos_datos = {
+            "nombre": self.entry_nombre.get(),
+            "apellido": self.entry_apellido.get(),
+            "telefono": self.entry_telefono.get(),
+            "ciudad_residencia": self.entry_ciudad.get(),
+            "provincia_residencia": self.entry_provincia.get(),
+            "email": self.entry_email.get()
+        }
+        
+        self.datos.editar_cliente(id_usuario, nuevos_datos)
+        self.limpiarGrid()
+        self.llenarDatosClientes()
 
-    def mostrarVentanaEdicionCliente(self, id_usuario, cliente):
-        if cliente is None:
+    def editarCliente(self):
+        selected = self.grid.focus()                        
+        clave = self.grid.item(selected, 'text')
+        #seleccion = self.grid.selection()
+        print(clave)
+        if clave!='':
+            #id_usuario = seleccion[0]
+            #print(id_usuario)
+            cliente = self.datos.obtener_cliente(clave)
+            print(cliente)
+            self.mostrarVentanaEdicionCliente(cliente)
+
+    def mostrarVentanaEdicionCliente(self, cliente):
+        if cliente == '':
             print("El cliente no se encontró en la base de datos.")
             return
 
         ventana_edicion = Toplevel(self)
         ventana_edicion.title("Editar Cliente")
 
+        frame_editar= tk.Frame(ventana_edicion)
+        frame_editar.pack() 
+
         label_nombre = Label(ventana_edicion, text="Nombre:")
         entry_nombre = Entry(ventana_edicion)
-        entry_nombre.insert(0, cliente["nombre"])
+        entry_nombre.insert(0, cliente[1])
         label_nombre.grid(row=0, column=0)
         entry_nombre.grid(row=0, column=1)
 
         label_apellido = Label(ventana_edicion, text="Apellido:")
         entry_apellido = Entry(ventana_edicion)
-        entry_apellido.insert(0, cliente["apellido"])
+        entry_apellido.insert(0, cliente[2])
         label_apellido.grid(row=1, column=0)
         entry_apellido.grid(row=1, column=1)
 
         label_telefono = Label(ventana_edicion, text="Teléfono:")
         entry_telefono = Entry(ventana_edicion)
-        entry_telefono.insert(0, cliente["telefono"])  # Mostrar valor actual
+        entry_telefono.insert(0, cliente[3])  # Mostrar valor actual
         label_telefono.grid(row=2, column=0)
         entry_telefono.grid(row=2, column=1)
 
         label_ciudad = Label(ventana_edicion, text="Ciudad Residencia:")
         entry_ciudad = Entry(ventana_edicion)
-        entry_ciudad.insert(0, cliente["ciudad_residencia"])  # Mostrar valor actual
+        entry_ciudad.insert(0, cliente[6])  # Mostrar valor actual
         label_ciudad.grid(row=3, column=0)
         entry_ciudad.grid(row=3, column=1)
 
         label_provincia = Label(ventana_edicion, text="Provincia Residencia:")
         entry_provincia = Entry(ventana_edicion)
-        entry_provincia.insert(0, cliente["provincia_residencia"])  # Mostrar valor actual
+        entry_provincia.insert(0, cliente[7])  # Mostrar valor actual
         label_provincia.grid(row=4, column=0)
         entry_provincia.grid(row=4, column=1)
 
         label_email = Label(ventana_edicion, text="Email:")
         entry_email = Entry(ventana_edicion)
-        entry_email.insert(0, cliente["email"])  # Mostrar valor actual
+        entry_email.insert(0, cliente[8])  # Mostrar valor actual
         label_email.grid(row=5, column=0)
         entry_email.grid(row=5, column=1)
+        
+        boton_guardar = Button(self.ventana_edicion, text="Guardar cambios",commad= lambda: self.guardar_cambios(cliente[0], ventana_edicion))
+        boton_guardar.grid(row=6, columnspan=2)
 
     def guardar_cambios(self, id_usuario=None, ventana_edicion=None):
         if self.editando_cliente:
@@ -371,10 +403,9 @@ class Ventana(Frame):
             self.datos.editar_cliente(id_usuario, nuevos_datos)
             ventana_edicion.destroy()
 
-    boton_guardar = Button(self.ventana_edicion, text="Guardar cambios", command=self.guardar_cambios)
-    boton_guardar.grid(row=6, columnspan=2)
 
-    self.ventana_edicion.mainloop()
+
+        self.ventana_edicion.mainloop()
 
     def editarCuenta(self):
         selected = self.grid.focus()
@@ -388,16 +419,3 @@ class Ventana(Frame):
             self.entry_tipo_cuenta.insert(0, valores[1])
             self.entry_cedula.delete(0, END)
             self.entry_cedula.insert(0, valores[2])
-
-    def guardarCambiosCuenta(self):
-        if self.editando_cuenta:
-            nuevos_datos_cuenta = {
-                "tipo_cuenta": self.entry_tipo_cuenta.get(),
-                "cedula": self.entry_cedula.get(),
-                # Agrega más atributos de la cuenta bancaria
-            }
-            self.datos.editar_cuenta(self.editando_cuenta, nuevos_datos_cuenta)
-            self.editando_cuenta = None
-            self.limpiarGrid()  # Actualiza la vista de cuentas bancarias
-            self.mostrarCuentas()
-
