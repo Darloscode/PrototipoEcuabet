@@ -75,35 +75,10 @@ class Base:
         sql.close()    
         return datos
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     #SHEYLA
     def obtener_cliente(self, id_usuario):
         sql = self.cnn.cursor()
-        sql.execute("SELECT * FROM cliente WHERE id_usuario = %s", id_usuario)
+        sql.execute("SELECT * FROM cliente WHERE id_usuario =" + "'" + id_usuario + "'")
         cliente = sql.fetchone()
         sql.close()
         return cliente
@@ -117,3 +92,15 @@ class Base:
         sql.execute(query, valores)
         self.cnn.commit()
         sql.close()
+
+    def editar_cuenta(self, num_cnta, nuevos_datos):
+        try:
+            with self.cnn.cursor() as cursor:
+                # Actualiza los datos en la base de datos usando una consulta SQL
+                sql = "UPDATE cuentas SET tipo_cuenta=%s, cedula=%s WHERE num_cnta=%s"
+                cursor.execute(sql, (nuevos_datos["tipo_cuenta"], nuevos_datos["cedula"], num_cnta))
+                self.cnn.commit()
+                return 1  # Éxito
+        except Exception as e:
+            print("Error:", e)
+            return 0

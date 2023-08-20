@@ -264,17 +264,49 @@ class Ventana(Frame):
         self.btnPronost = Button(frame1, text="Pronosticos", command = self.mostrasPronosticos, bg="#bfdaff", fg="black")
         self.btnPronost.place(x=280,y=2,width=130, height=30)
 
-        # Agregar un botón para editar cliente
-        #self.btnEditarCliente = Button(frame1, text="Editar Cliente", command=self.editarCliente, bg="#bfdaff",fg="black")
-        #self.btnEditarCliente.place(x=450, y=2, width=100, height=30)
+        # sheyla
+        self.btnEditarCliente = Button(frame1, text="Editar Cliente", command=self.editarCliente, bg="#bfdaff",
+                                       fg="black")
+        self.btnEditarCliente.place(x=450, y=2, width=100, height=30)
 
-        # Agregar un botón para editar cuenta
-        #self.btnEditarCuenta = Button(frame1, text="Editar Cuenta", command=self.editarCuenta, bg="#bfdaff", fg="black")
-        #self.btnEditarCuenta.place(x=570, y=2, width=100, height=30)
+        # -- Se agrega los campos de edición para clientes
+        self.entry_nombre = Entry(self)
+        self.entry_nombre.place(x=30, y=250, width=100, height=25)
 
+        self.entry_apellido = Entry(self)
+        self.entry_apellido.place(x=150, y=250, width=100, height=25)
 
-    #Sheyla Ventana editar
-    #Cliente
+        self.entry_telefono = Entry(self)
+        self.entry_telefono.place(x=270, y=250, width=100, height=25)
+
+        self.entry_cedula = Entry(self)
+        self.entry_cedula.place(x=390, y=250, width=100, height=25)
+
+        self.entry_edad = Entry(self)
+        self.entry_edad.place(x=510, y=250, width=50, height=25)
+
+        self.entry_ciudad = Entry(self)
+        self.entry_ciudad.place(x=580, y=250, width=100, height=25)
+
+        self.entry_provincia = Entry(self)
+        self.entry_provincia.place(x=700, y=250, width=100, height=25)
+
+        self.entry_email = Entry(self)
+        self.entry_email.place(x=820, y=250, width=150, height=25)
+
+        # Botón para guardar los cambios en cliente
+        self.btnGuardarCliente = Button(self, text="Guardar Cambios Cliente", command=self.guardarCambiosCliente,
+                                        bg="#bfdaff", fg="black")
+        self.btnGuardarCliente.place(x=30, y=290, width=200, height=30)
+
+        # Sheyla
+        self.btnEditarCuenta = Button(frame1, text="Editar Cuenta", command=self.editarCuenta, bg="#bfdaff", fg="black")
+        self.btnEditarCuenta.place(x=570, y=2, width=100, height=30)
+
+        # -- Se agrega los campos de edición para Cuenta
+        self.entry_tipo_cuenta = Entry(self)
+        self.entry_tipo_cuenta.place(x=700, y=250, width=100, height=25)
+
     def editarCliente(self):
         seleccion = self.grid.selection()
         if seleccion:
@@ -283,102 +315,89 @@ class Ventana(Frame):
             self.mostrarVentanaEdicionCliente(id_usuario, cliente)
 
     def mostrarVentanaEdicionCliente(self, id_usuario, cliente):
-        if cliente == None:
+        if cliente is None:
             print("El cliente no se encontró en la base de datos.")
             return
 
-        ventana_edicion = Toplevel(self.master)
+        ventana_edicion = Toplevel(self)
         ventana_edicion.title("Editar Cliente")
-        ventana_edicion.geometry("400x300")
 
-        lbl_nombre = Label(ventana_edicion, text="Nombre:")
-        lbl_nombre.pack()
+        label_nombre = Label(ventana_edicion, text="Nombre:")
         entry_nombre = Entry(ventana_edicion)
-        entry_nombre.pack()
-        entry_nombre.insert(0, cliente["nombre"])  # Cargar nombre actual
+        entry_nombre.insert(0, cliente["nombre"])
+        label_nombre.grid(row=0, column=0)
+        entry_nombre.grid(row=0, column=1)
 
-        lbl_apellido = Label(ventana_edicion, text="Apellido:")
-        lbl_apellido.pack()
+        label_apellido = Label(ventana_edicion, text="Apellido:")
         entry_apellido = Entry(ventana_edicion)
-        entry_apellido.pack()
-        entry_apellido.insert(0, cliente["apellido"])  # Carga el apellido actual
+        entry_apellido.insert(0, cliente["apellido"])
+        label_apellido.grid(row=1, column=0)
+        entry_apellido.grid(row=1, column=1)
 
-                # Botón para guardar los cambios
-                #boton_guardar = Button(ventana_editar, text="Guardar Cambios",command=lambda: self.guardarCambiosCliente(id_cliente, nuevo_nombre.get(),nuevo_apellido.get()))
-                #boton_guardar.pack()
+        label_telefono = Label(ventana_edicion, text="Teléfono:")
+        entry_telefono = Entry(ventana_edicion)
+        entry_telefono.insert(0, cliente["telefono"])  # Mostrar valor actual
+        label_telefono.grid(row=2, column=0)
+        entry_telefono.grid(row=2, column=1)
 
-    def guardarCambiosCliente(self, id_cliente, nuevo_nombre, nuevo_apellido):
-        # Se realizar la actualización en la base de datos
-        self.datos.actualizar_cliente(id_cliente, nuevo_nombre, nuevo_apellido)
+        label_ciudad = Label(ventana_edicion, text="Ciudad Residencia:")
+        entry_ciudad = Entry(ventana_edicion)
+        entry_ciudad.insert(0, cliente["ciudad_residencia"])  # Mostrar valor actual
+        label_ciudad.grid(row=3, column=0)
+        entry_ciudad.grid(row=3, column=1)
 
-        # Se actualiza la vista de la tabla de clientes
-        self.mostrarClientes()
+        label_provincia = Label(ventana_edicion, text="Provincia Residencia:")
+        entry_provincia = Entry(ventana_edicion)
+        entry_provincia.insert(0, cliente["provincia_residencia"])  # Mostrar valor actual
+        label_provincia.grid(row=4, column=0)
+        entry_provincia.grid(row=4, column=1)
 
+        label_email = Label(ventana_edicion, text="Email:")
+        entry_email = Entry(ventana_edicion)
+        entry_email.insert(0, cliente["email"])  # Mostrar valor actual
+        label_email.grid(row=5, column=0)
+        entry_email.grid(row=5, column=1)
 
+    def guardar_cambios(self, id_usuario=None, ventana_edicion=None):
+        if self.editando_cliente:
+            nuevos_datos = {
+                "nombre": self.entry_nombre.get(),
+                "apellido": self.entry_apellido.get(),
+                "telefono": self.entry_telefono.get(),
+                "ciudad_residencia": self.entry_ciudad.get(),
+                "provincia_residencia": self.entry_provincia.get(),
+                "email": self.entry_email.get()
+            }
+            self.datos.editar_cliente(id_usuario, nuevos_datos)
+            ventana_edicion.destroy()
 
-    #Cuenta Bancaria
+    boton_guardar = Button(self.ventana_edicion, text="Guardar cambios", command=self.guardar_cambios)
+    boton_guardar.grid(row=6, columnspan=2)
+
+    self.ventana_edicion.mainloop()
+
     def editarCuenta(self):
-        selected_item = self.grid.selection()
-        if selected_item:
-            num_cuenta = self.grid.item(selected_item)["text"]
-            detalles_cuenta = self.datos.obtener_detalle_cuenta(num_cuenta)
+        selected = self.grid.focus()
+        clave = self.grid.item(selected, 'text')
+        if clave == '':
+            messagebox.showwarning("Editar Cuenta", 'Debes seleccionar un elemento')
+        else:
+            valores = self.grid.item(selected, 'values')
+            self.editando_cuenta = clave
+            self.entry_tipo_cuenta.delete(0, END)
+            self.entry_tipo_cuenta.insert(0, valores[1])
+            self.entry_cedula.delete(0, END)
+            self.entry_cedula.insert(0, valores[2])
 
-            if detalles_cuenta:
-                ventana_editar = Toplevel(self)
-                ventana_editar.title("Editar Cuenta Bancaria")
-
-                Label(ventana_editar, text="Tipo de Cuenta:").pack()
-                nuevo_tipo = Entry(ventana_editar)
-                nuevo_tipo.insert(0, detalles_cuenta[1])
-                nuevo_tipo.pack()
-
-                Label(ventana_editar, text="Banco:").pack()
-                nuevo_banco = Entry(ventana_editar)
-                nuevo_banco.insert(0, detalles_cuenta[3])
-                nuevo_banco.pack()
-
-                # ... Agregar campos para otros detalles
-
-                boton_guardar = Button(ventana_editar, text="Guardar Cambios",
-                                       command=lambda: self.guardarCambiosCuenta(num_cuenta, nuevo_tipo.get(),
-                                                                                 nuevo_banco.get()))
-                boton_guardar.pack()
-
-    def guardarCambiosCuenta(self, num_cuenta, nuevo_tipo, nuevo_banco):
-        self.datos.actualizar_cuenta(num_cuenta, nuevo_tipo, nuevo_banco)
-        self.mostrarCuentas()
-
-
-    #MOVIMIENTO BANCARIO
-    def editarMovimiento(self):
-        selected_item = self.grid.selection()
-        if selected_item:
-            num_movimiento = self.grid.item(selected_item)["text"]
-            detalles_movimiento = self.datos.obtener_detalle_movimiento(num_movimiento)
-
-            if detalles_movimiento:
-                ventana_editar = Toplevel(self)
-                ventana_editar.title("Editar Movimiento Bancario")
-
-                Label(ventana_editar, text="Tipo de Movimiento:").pack()
-                nuevo_tipo = Entry(ventana_editar)
-                nuevo_tipo.insert(0, detalles_movimiento[1])
-                nuevo_tipo.pack()
-
-                Label(ventana_editar, text="Monto:").pack()
-                nuevo_monto = Entry(ventana_editar)
-                nuevo_monto.insert(0, detalles_movimiento[3])
-                nuevo_monto.pack()
-
-                # ... Agregar campos para otros detalles
-
-                boton_guardar = Button(ventana_editar, text="Guardar Cambios",
-                                       command=lambda: self.guardarCambiosMovimiento(num_movimiento, nuevo_tipo.get(),
-                                                                                     nuevo_monto.get()))
-                boton_guardar.pack()
-
-    def guardarCambiosMovimiento(self, num_movimiento, nuevo_tipo, nuevo_monto):
-        self.datos.actualizar_movimiento(num_movimiento, nuevo_tipo, nuevo_monto)
-        self.mostrarMovimientos()
-
+    def guardarCambiosCuenta(self):
+        if self.editando_cuenta:
+            nuevos_datos_cuenta = {
+                "tipo_cuenta": self.entry_tipo_cuenta.get(),
+                "cedula": self.entry_cedula.get(),
+                # Agrega más atributos de la cuenta bancaria
+            }
+            self.datos.editar_cuenta(self.editando_cuenta, nuevos_datos_cuenta)
+            self.editando_cuenta = None
+            self.limpiarGrid()  # Actualiza la vista de cuentas bancarias
+            self.mostrarCuentas()
 
