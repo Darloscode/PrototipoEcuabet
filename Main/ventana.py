@@ -15,7 +15,7 @@ class Ventana(Frame):
         self.master = master
         self.pack()
         self.create_widgets()      
-        self.grid = ttk.Treeview(columns=("col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8"))
+        self.grid = ttk.Treeview(columns=("col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8","col9","col10"))
         self.btnEliminar = Button(self, text="", command = self.eliminarCliente, bg="#bfdaff", fg="black")
         self.btnEditar = Button(self, text="", command = self.eliminarCliente, bg="#bfdaff", fg="black")
         self.btnAgregar = Button(self, text="", command = self.mostrarVentanaAgregarCliente, bg="#bfdaff", fg="black")
@@ -36,7 +36,7 @@ class Ventana(Frame):
     def mostrarClientes(self):  
         self.eliminarColumnasGrid()
 
-        self.grid = ttk.Treeview(columns=("col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8"))
+        self.grid = ttk.Treeview(columns=("col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8","col9","col10"))
 
         self.grid.column("#0", width=60, anchor=CENTER)
         self.grid.column("col1", width=70, anchor=CENTER)
@@ -47,6 +47,8 @@ class Ventana(Frame):
         self.grid.column("col6", width=90, anchor=CENTER)
         self.grid.column("col7", width=90, anchor=CENTER)
         self.grid.column("col8", width=150, anchor=CENTER)
+        self.grid.column("col9", width=90, anchor=CENTER)
+        self.grid.column("col10", width=90, anchor=CENTER)
         self.grid.column("#0", width=60, anchor=CENTER)
         self.grid.column("col1", width=70, anchor=CENTER)
         self.grid.column("col2", width=90, anchor=CENTER)
@@ -56,6 +58,8 @@ class Ventana(Frame):
         self.grid.column("col6", width=90, anchor=CENTER)
         self.grid.column("col7", width=90, anchor=CENTER)
         self.grid.column("col8", width=150, anchor=CENTER)
+        self.grid.column("col9", width=90, anchor=CENTER)
+        self.grid.column("col10", width=90, anchor=CENTER)
 
         self.grid.heading("#0", text="Id", anchor=CENTER)
         self.grid.heading("col1", text="Nombre", anchor=CENTER)
@@ -71,6 +75,8 @@ class Ventana(Frame):
         self.grid.heading("col6", text="Ciudad", anchor=CENTER)
         self.grid.heading("col7", text="Provincia", anchor=CENTER)
         self.grid.heading("col8", text="Email", anchor=CENTER)
+        self.grid.heading("col9", text="Montraseña", anchor=CENTER)
+        self.grid.heading("col10", text="Monto", anchor=CENTER)
 
         self.grid.place(x=18, y=35, width=860, height=200)
 
@@ -83,7 +89,7 @@ class Ventana(Frame):
         self.btnAgregar.place(x=100,y=250,width=170, height=30 )
 
      #   self.btnEditar = Button(self, text="Editar", command = self.editarCliente, bg="#bfdaff", fg="black")
-     #  self.btnEditar.place(x=600,y=250,width=170, height=30 )
+     #   self.btnEditar.place(x=600,y=250,width=170, height=30 )
 
     def mostrarCuentas(self): 
 
@@ -240,7 +246,7 @@ class Ventana(Frame):
     def llenarDatosClientes(self):
         datos = self.datos.consulta_cliente()
         for d in datos:
-            self.grid.insert("", END, text=d[0], values=(d[1], d[2], d[3], d[4], d[5], d[6], d[7], d[8]))      
+            self.grid.insert("", END, text=d[0], values=(d[1], d[2], d[3], d[4], d[5], d[6], d[7], d[8], d[9], d[10]))      
 
     def llenarDatosPronosticos(self):
         datos = self.datos.consulta_pronostico()
