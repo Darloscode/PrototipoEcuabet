@@ -8,6 +8,7 @@ from tkinter import Toplevel, Label, Entry, Button
 
 
 class Ventana(Frame):
+    
     datos = Base()
 
     def __init__(self, master=None):
@@ -281,7 +282,7 @@ class Ventana(Frame):
         ventana_agregar.title("Agregar Cliente")
         ventana_agregar.geometry("400x300")
 
-        lbl_id = Label(ventana_agregar, text="ID:")
+        lbl_id = Label(ventana_agregar, text="ID:")        
         lbl_id.pack()
         entry_id = Entry(ventana_agregar)
         entry_id.pack()
@@ -336,16 +337,30 @@ class Ventana(Frame):
         entry_monto = Entry(ventana_agregar)
         entry_monto.pack()
 
-        btn_guardar = Button(ventana_agregar, text="Guardar", command=lambda: self.guardarNuevoCliente(entry_id.get(), entry_nombre.get(), entry_apellido.get(), entry_telefono.get(),entry_cedula.get(), int(entry_edad.get()),entry_ciudad.get(), entry_provincia.get(), entry_email.get(),entry_contrasena.get(), float(entry_monto.get())))
+        #En el botón también tiene un cambio    
+        btn_guardar = Button(ventana_agregar, text="Guardar", 
+                             command=lambda: [self.guardarNuevoCliente(entry_id.get(), 
+                                                                      entry_nombre.get(), 
+                                                                      entry_apellido.get(), 
+                                                                      entry_telefono.get(),
+                                                                      entry_cedula.get(), 
+                                                                      int(entry_edad.get()), 
+                                                                      entry_ciudad.get(), 
+                                                                      entry_provincia.get(), 
+                                                                      entry_email.get(), 
+                                                                      entry_contrasena.get(), 
+                                                                      float(entry_monto.get())),
+                                                self.destruirVentana(ventana_agregar)])
         btn_guardar.pack()
 
-        
-    def guardarNuevoCliente(self, id_usuario, nombre, apellido, telefono, cedula, edad, ciudad, provincia, email, contrasena, monto):
-        self.datos.insertar_cliente(id_usuario, nombre, apellido, telefono, cedula, int(edad), ciudad, provincia, email, contrasena, float(monto))
-        self.mostrarClientes()
-        if self.ventana_agregar:
-            self.ventana_agregar.destroy()
+    #Agregué este método para no duplicar codigo 
+    def destruirVentana(self, ventana):
+        ventana.destroy()
 
+    #Aquí hice cambios
+    def guardarNuevoCliente(self, id_usuario, nombre, apellido, telefono, cedula, edad, ciudad, provincia, email, contrasena, monto):            
+        self.datos.insertar_cliente(id_usuario, nombre, apellido, telefono, cedula, int(edad), ciudad, provincia, email, contrasena, float(monto))        
+                
     def mostrarVentanaAgregarCuenta(self):
         ventana_agregar_cuenta = Toplevel(self.master)
         ventana_agregar_cuenta.title("Agregar Cuenta")
