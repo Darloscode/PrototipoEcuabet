@@ -85,27 +85,19 @@ class Base:
 
     def editar_cliente(self, id_usuario, nuevos_datos):
         sql = self.cnn.cursor()
-        query = "UPDATE cliente SET nombre = %s, apellido = %s, telefono = %s, cedula = %s, edad = %s, ciudad_residencia = %s, provincia_residencia = %s, email = %s WHERE id_usuario = %s"
+        query = "UPDATE cliente SET nombre = %s, apellido = %s, telefono = %s, cedula = %s, ciudad_residencia = %s, provincia_residencia = %s, email = %s, Contraseña = %s WHERE id_usuario = %s"
         valores = (nuevos_datos["nombre"], nuevos_datos["apellido"], nuevos_datos["telefono"], nuevos_datos["cedula"],
-                   nuevos_datos["edad"], nuevos_datos["ciudad"], nuevos_datos["provincia"], nuevos_datos["email"],
+                   nuevos_datos["ciudad"], nuevos_datos["provincia"], nuevos_datos["email"], nuevos_datos["Contraseña"],
                    id_usuario)
         sql.execute(query, valores)
         self.cnn.commit()
         sql.close()
 
-    def editar_cuenta(self, num_cnta, nuevos_datos):
-        try:
-            with self.cnn.cursor() as cursor:
-                # Actualiza los datos en la base de datos usando una consulta SQL
-                sql = "UPDATE cuentas SET tipo_cuenta=%s, cedula=%s WHERE num_cnta=%s"
-                cursor.execute(sql, (nuevos_datos["tipo_cuenta"], nuevos_datos["cedula"], num_cnta))
-                self.cnn.commit()
-                return 1  # Éxito
-        except Exception as e:
-            print("Error:", e)
-            return 0
-        
+    def guardar_cambios(self, id_usuario, nuevos_datos):
+        self.editar_cliente(id_usuario, nuevos_datos)
+        print("Cambios guardados exitosamente.")
 
+        
     #LUIS
     def insertar_cliente(self, id_usuario ,nombre, apellido, telefono, cedula, edad, ciudad, provincia, email, contrasena, monto):
         #Aquí hice cambios
@@ -145,3 +137,4 @@ class Base:
             print("Pronóstico agregado exitosamente.")
         except mysql.connector.Error as err:
             print(f"Error al agregar el pronóstico: {err}")
+
