@@ -1,4 +1,5 @@
 import mysql.connector
+from datetime import date
 
 class Base:
     def __init__(self):
@@ -114,27 +115,35 @@ class Base:
             print(f"Error al agregar el cliente: {err}")
 
 
-    def insertar_cuenta(self, tipo, cedula, banco, estado):
+    def insertar_cuenta(self, num_cuenta, tipo, cedula, banco, id_usuario):
         try:
             sql = self.cnn.cursor()
-            insert_query = "INSERT INTO cuenta_bancaria (tipo, cedula, banco, estado) VALUES (%s, %s, %s, %s)"
-            values = (tipo, cedula, banco, estado)
-            sql.execute(insert_query, values)
+            values = "\"{}\", \"{}\", \"{}\", \"{}\", {}, \"{}\"".format(num_cuenta, tipo, cedula, banco, 1, id_usuario)
+            insert_query = "INSERT INTO cuenta_bancaria (num_cuenta ,tipo_cuenta, cedula_dueño, banco, estado, id_usuario) VALUES ("+values+")"
+            print(insert_query)
+            sql.execute(insert_query)
             self.cnn.commit()
             sql.close()
             print("Cuenta bancaria agregada exitosamente.")
         except mysql.connector.Error as err:
             print(f"Error al agregar la cuenta bancaria: {err}")
 
-    def insertar_pronostico(self, monto, valor_mercado, ganancia, fecha, id_usuario, id_enfrentamiento):
+    def insertar_pronostico(self,id_pronostico,monto_apuesta,valor_multiplicativo,ganancia,fecha_apuesta,id_usuario,id_enfrentamiento):
+        x=[int(part) for part in fecha_apuesta.split("/")]
+        fecha=date(x[0],x[1],x[2])
         try:
             sql = self.cnn.cursor()
-            insert_query = "INSERT INTO pronostico_deportivo (monto, valor_mercado, ganancia, fecha, id_usuario, id_enfrentamiento) VALUES (%s, %s, %s, %s, %s, %s)"
-            values = (monto, valor_mercado, ganancia, fecha, id_usuario, id_enfrentamiento)
+            insert_query = (
+                "INSERT INTO pronostico_deportivo "
+                "(id_pronostico,monto_apuesta,valor_multiplicativo,ganancia,fecha_apuesta,id_usuario,id_enfrentamiento) "
+                "VALUES ('{}', {}, {}, {}, %s, %s, %s)".format(
+                    id_pronostico, monto_apuesta, valor_multiplicativo, ganancia
+                )
+            )
+            values = (fecha, id_usuario, id_enfrentamiento)
             sql.execute(insert_query, values)
             self.cnn.commit()
             sql.close()
             print("Pronóstico agregado exitosamente.")
         except mysql.connector.Error as err:
             print(f"Error al agregar el pronóstico: {err}")
-

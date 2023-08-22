@@ -76,7 +76,7 @@ class Ventana(Frame):
         self.grid.heading("col6", text="Ciudad", anchor=CENTER)
         self.grid.heading("col7", text="Provincia", anchor=CENTER)
         self.grid.heading("col8", text="Email", anchor=CENTER)
-        self.grid.heading("col9", text="Montraseña", anchor=CENTER)
+        self.grid.heading("col9", text="Contraseña", anchor=CENTER)
         self.grid.heading("col10", text="Monto", anchor=CENTER)
 
         self.grid.place(x=18, y=35, width=860, height=200)
@@ -163,7 +163,7 @@ class Ventana(Frame):
         self.btnEliminar = Button(self, text="Eliminar", command = self.eliminarPronostico, bg="#bfdaff", fg="black")
         self.btnEliminar.place(x=350,y=250,width=170, height=30 )
 
-        self.btnAgregar = Button(self, text="Agregar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnAgregar = Button(self, text="Agregar", command = self.mostrarVentanaAgregarPronostico, bg="#bfdaff", fg="black")
         self.btnAgregar.place(x=100,y=250,width=170, height=30 )
 
         self.btnEditar = Button(self, text="Editar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
@@ -280,7 +280,7 @@ class Ventana(Frame):
     def mostrarVentanaAgregarCliente(self):
         ventana_agregar = Toplevel(self.master)
         ventana_agregar.title("Agregar Cliente")
-        ventana_agregar.geometry("400x300")
+        ventana_agregar.geometry("400x600")
 
         lbl_id = Label(ventana_agregar, text="ID:")        
         lbl_id.pack()
@@ -395,16 +395,73 @@ class Ventana(Frame):
 
         entry_id_usuario = Entry(ventana_agregar_cuenta)
         entry_id_usuario.pack()
-
-        btn_agregar_cuenta = Button(ventana_agregar_cuenta, text="Agregar Cuenta", command=lambda: self.agregarCuenta(
-            entry_numero_cuenta.get(), entry_tipo_cuenta.get(), entry_cedula.get(), entry_banco.get(), entry_id_usuario.get()))
-        btn_agregar_cuenta.pack()
+#cambios en guardar
+        btn_guardar = Button(ventana_agregar_cuenta, text="Guardar", 
+                             command=lambda: [self.agregarCuenta(entry_numero_cuenta.get(), 
+                                                                      entry_tipo_cuenta.get(), 
+                                                                      entry_cedula.get(), 
+                                                                      entry_banco.get(), 
+                                                                      entry_id_usuario.get()),
+                                                self.destruirVentana(ventana_agregar_cuenta)])
+        btn_guardar.pack()
 
     def agregarCuenta(self, numero_cuenta, tipo_cuenta, cedula_dueño, banco, id_usuario):
         self.datos.insertar_cuenta(numero_cuenta, tipo_cuenta, cedula_dueño, banco, id_usuario)
-        self.mostrarCuentas()
-        if self.ventana_agregar_cuenta:
-            self.ventana_agregar_cuenta.destroy()
+
+    def mostrarVentanaAgregarPronostico(self):
+        ventana_agregar = Toplevel (self.master)
+        ventana_agregar.title("Agregar Pronóstico")
+        ventana_agregar.geometry("400x400")
+
+        lbl_id_pronostico = Label(ventana_agregar, text="ID_pron:")        
+        lbl_id_pronostico.pack()
+        entry_id_pronostico = Entry(ventana_agregar)
+        entry_id_pronostico.pack()
+
+        lbl_monto = Label(ventana_agregar, text="Monto:")        
+        lbl_monto.pack()
+        entry_monto = Entry(ventana_agregar)
+        entry_monto.pack()
+
+        lbl_valorM = Label(ventana_agregar, text="Valor Multiplicativo;")        
+        lbl_valorM.pack()
+        entry_valorM = Entry(ventana_agregar)
+        entry_valorM.pack()
+
+        lbl_ganancia = Label(ventana_agregar, text="Ganancia:")        
+        lbl_ganancia.pack()
+        entry_ganancia = Entry(ventana_agregar)
+        entry_ganancia.pack()
+
+        lbl_fecha = Label(ventana_agregar, text="Fecha Apuesta (YYYY/MM/DD):")        
+        lbl_fecha.pack()
+        entry_fecha = Entry(ventana_agregar)
+        entry_fecha.pack()
+
+        lbl_id_usuario = Label(ventana_agregar, text="id_usuario:")        
+        lbl_id_usuario.pack()
+        entry_id_usuario = Entry(ventana_agregar)
+        entry_id_usuario.pack()
+
+        lbl_id_enfrentamiento = Label(ventana_agregar, text="id_enfrentamiento:")        
+        lbl_id_enfrentamiento.pack()
+        entry_id_enfrentamiento = Entry(ventana_agregar)
+        entry_id_enfrentamiento.pack()
+
+        btn_guardar = Button(ventana_agregar, text="Guardar", 
+                             command=lambda: [self.guardarNuevoPronostico(entry_id_pronostico.get(), 
+                                                                      float(entry_monto.get()), 
+                                                                      float(entry_valorM.get()), 
+                                                                      float(entry_ganancia.get()),
+                                                                      entry_fecha.get(), 
+                                                                      entry_id_usuario.get(), 
+                                                                      entry_id_enfrentamiento.get(), 
+                                                                      ),
+                                                self.destruirVentana(ventana_agregar)])
+        btn_guardar.pack()
+
+    def guardarNuevoPronostico(self,id_pronostico,monto_apuesta,valor_multiplicativo,ganancia,fecha_apuesta,id_usuario,id_enfrentamiento):
+        self.datos.insertar_pronostico(id_pronostico,monto_apuesta,valor_multiplicativo,ganancia,fecha_apuesta,id_usuario,id_enfrentamiento)
 """"
         # sheyla
         #self.btnEditarCliente = Button(frame1, text="Editar Cliente", command=self.editarCliente, bg="#bfdaff",fg="black")
