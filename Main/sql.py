@@ -85,18 +85,26 @@ class Base:
         return cliente
 
     def editar_cliente(self, id_usuario, nuevos_datos):
-        sql = self.cnn.cursor()
-        query = "UPDATE cliente SET nombre = %s, apellido = %s, telefono = %s, cedula = %s, ciudad_residencia = %s, provincia_residencia = %s, email = %s, Contraseña = %s WHERE id_usuario = %s"
-        valores = (nuevos_datos["nombre"], nuevos_datos["apellido"], nuevos_datos["telefono"], nuevos_datos["cedula"],
-                   nuevos_datos["ciudad"], nuevos_datos["provincia"], nuevos_datos["email"], nuevos_datos["Contraseña"],
-                   id_usuario)
-        sql.execute(query, valores)
-        self.cnn.commit()
-        sql.close()
-
-    def guardar_cambios(self, id_usuario, nuevos_datos):
-        self.editar_cliente(id_usuario, nuevos_datos)
-        print("Cambios guardados exitosamente.")
+        try:
+            sql = self.cnn.cursor() 
+            update_query = "UPDATE cliente SET nombre = %s, apellido = %s, telefono = %s, cedula = %s, ciudad_residencia = %s, provincia_residencia = %s, email = %s, password = %s WHERE id_usuario = %s"
+            valores = (
+                nuevos_datos["nombre"],
+                nuevos_datos["apellido"],
+                nuevos_datos["telefono"],
+                nuevos_datos["cedula"],
+                nuevos_datos["ciudad"],
+                nuevos_datos["provincia"],
+                nuevos_datos["email"],
+                nuevos_datos["contraseña"],
+                id_usuario
+            )
+            sql.execute(update_query, valores)
+            self.cnn.commit()
+            sql.close()
+            print("Cambios guardados exitosamente.")
+        except mysql.connector.Error as err:
+            print(f"Error al actualizar el cliente: {err}")
 
         
     #LUIS
