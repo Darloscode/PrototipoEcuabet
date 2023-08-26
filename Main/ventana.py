@@ -457,7 +457,9 @@ class Ventana(Frame):
     def guardarNuevoPronostico(self,id_pronostico,monto_apuesta,valor_multiplicativo,ganancia,fecha_apuesta,id_usuario,id_enfrentamiento):
         self.datos.insertar_pronostico(id_pronostico,monto_apuesta,valor_multiplicativo,ganancia,fecha_apuesta,id_usuario,id_enfrentamiento)
     
-    #SHEYLA 
+
+#SHEYLA 
+    #Este método está repetido
     def mostrarVentanaEdicionCliente(self, cliente):
         if cliente == '':
             print("El cliente no se encontró en la base de datos.")
@@ -681,4 +683,5 @@ class Ventana(Frame):
         self.datos.editar_cuenta(id_cuenta, datos_cuenta)
         self.limpiarGrid()
         self.llenarDatosCuentas()
+
 

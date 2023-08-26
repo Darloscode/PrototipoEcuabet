@@ -3,7 +3,7 @@ from ventana import *
 
 def main():    
     root =Tk()
-    root.wm_title("Prueba")
+    root.wm_title("Prototipo Ecuabet")
     app = Ventana(root)
     app.mainloop()
 

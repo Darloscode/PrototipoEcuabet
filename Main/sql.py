@@ -30,6 +30,13 @@ class Base:
         sql.close()    
         return datos
     
+    def consulta_pronostico(self):
+        sql = self.cnn.cursor()
+        sql.execute("SELECT * FROM pronostico_deportivo")
+        datos = sql.fetchall()
+        sql.close()    
+        return datos
+
     def elimina_pronostico(self, id):
         sql = self.cnn.cursor()
         sql.execute("DELETE FROM pronostico_deportivo WHERE id_pronostico = " +"'" + id + "'")
@@ -69,12 +76,6 @@ class Base:
         sql.close()        
         return cantidad
 
-    def consulta_pronostico(self):
-        sql = self.cnn.cursor()
-        sql.execute("SELECT * FROM pronostico_deportivo")
-        datos = sql.fetchall()
-        sql.close()    
-        return datos
 
     #SHEYLA
     def obtener_cliente(self, id_usuario):
