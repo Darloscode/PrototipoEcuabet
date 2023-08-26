@@ -118,7 +118,7 @@ class Ventana(Frame):
 
         self.llenarDatosCuentas()
 
-        self.btnEliminar = Button(self, text="Eliminar", command = self.eliminarCuentaB, bg="#bfdaff", fg="black")
+        self.btnEliminar = Button(self, text="Eliminar", command = self.eliminarCuentaBancaria, bg="#bfdaff", fg="black")
         self.btnEliminar.place(x=350,y=250,width=170, height=30 )
 
         self.btnAgregar = Button(self, text="Agregar", command = self.mostrarVentanaAgregarCuenta, bg="#bfdaff", fg="black")
@@ -176,7 +176,7 @@ class Ventana(Frame):
             print(clave)
             adv = messagebox.askquestion("Eliminar",'¿Deseas eliminar el registro seleccionado?\r'+data) 
             if adv==messagebox.YES:
-                cantidad = self.datos.elimina_registro(clave)
+                cantidad = self.datos.eliminar_clienteSP(clave)
                 if cantidad==1:
                     messagebox.showinfo("Eliminar", 'Registro eliminado correctamente')
                     self.limpiarGrid()
@@ -189,7 +189,7 @@ class Ventana(Frame):
         #rock = self.grid.item(selected)        
         pass
 
-    def eliminarCuentaB(self):
+    def eliminarCuentaBancaria(self):
         selected = self.grid.focus()                        
         clave = self.grid.item(selected, 'text')
 
@@ -201,7 +201,7 @@ class Ventana(Frame):
             print(clave)
             adv = messagebox.askquestion("Eliminar",'¿Deseas eliminar la cuenta bancaria?\r'+'Termina en: '+data) 
             if adv==messagebox.YES:
-                cantidad = self.datos.elimina_cuenta(clave)
+                cantidad = self.datos.eliminar_cuentaBSP(clave)
                 if cantidad==1:
                     messagebox.showinfo("Eliminar", 'Cuenta bancaria eliminada correctamente')
                     self.limpiarGrid()
@@ -226,15 +226,14 @@ class Ventana(Frame):
             print(clave)
             adv = messagebox.askquestion("Eliminar",'¿Deseas eliminar el pronostico?\r'+'Su ganancia es de: '+data)
             if adv==messagebox.YES:
-                cantidad = self.datos.elimina_pronostico(clave)
+                cantidad = self.datos.eliminar_pronosticoSP(clave)
                 if cantidad==1:
                     messagebox.showinfo("Eliminar", 'Pronostico eliminado correctamente')
                     self.limpiarGrid()
                     self.llenarDatosPronosticos()
                     print('Eliminado')
                 else:
-                    messagebox.showinfo("Eliminar", 'No se ha podido eliminar')                                
-
+                    messagebox.showinfo("Eliminar", 'No se ha podido eliminar')
         pass
     
     def llenarDatosClientes(self):

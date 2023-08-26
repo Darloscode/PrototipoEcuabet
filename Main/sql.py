@@ -44,7 +44,7 @@ class Base:
         self.cnn.commit()     
         sql.close()
         return cantidad
-
+    
     def elimina_registro(self, id_cliente):
         sql = self.cnn.cursor()
         sql.execute("DELETE FROM movimiento_bancario WHERE id_usuario = "+id_cliente)
@@ -65,7 +65,7 @@ class Base:
         sql.close()
         return cantidad
 
-    def elimina_cuenta(self, cuenta):
+    def eliminar_cuenta(self, cuenta):
         sql = self.cnn.cursor()
 
         sql.execute("DELETE FROM movimiento_bancario WHERE num_cuenta = " +"'" + cuenta + "'")
@@ -76,6 +76,29 @@ class Base:
         sql.close()        
         return cantidad
 
+    def eliminar_clienteSP(self, idCliente):        
+        sql = self.cnn.cursor()        
+        sql.execute("call eliminarCliente(" + "\"" + idCliente + "\");")
+        cantidad = sql.rowcount
+        self.cnn.commit()     
+        sql.close()
+        return cantidad
+    
+    def eliminar_cuentaBSP(self, idCliente):
+        sql = self.cnn.cursor()        
+        sql.execute("call eliminarCuentaBancaria(" + "\"" + idCliente + "\");")
+        cantidad = sql.rowcount
+        self.cnn.commit()     
+        sql.close()
+        return cantidad
+    
+    def eliminar_pronosticoSP(self, idCliente):
+        sql = self.cnn.cursor()        
+        sql.execute("call eliminarPronostico(" + "\"" + idCliente + "\");")
+        cantidad = sql.rowcount
+        self.cnn.commit()     
+        sql.close()
+        return cantidad        
 
     #SHEYLA
     def obtener_cliente(self, id_usuario):
