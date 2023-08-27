@@ -37,9 +37,9 @@ class Base:
         sql.close()    
         return datos
 
-    def elimina_pronostico(self, id):
+    def elimina_pronostico(self, idPronostico):
         sql = self.cnn.cursor()
-        sql.execute("DELETE FROM pronostico_deportivo WHERE id_pronostico = " +"'" + id + "'")
+        sql.execute("DELETE FROM pronostico_deportivo WHERE id_pronostico = " +"'" + idPronostico + "'")
         cantidad = sql.rowcount
         self.cnn.commit()     
         sql.close()
