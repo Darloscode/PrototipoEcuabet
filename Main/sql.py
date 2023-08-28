@@ -137,7 +137,7 @@ class Base:
         try:
             sql = self.cnn.cursor()
             values = "\"{}\", \"{}\", \"{}\", \"{}\", \"{}\", {}, \"{}\", \"{}\", \"{}\", \"{}\", {}".format(id_usuario, nombre, apellido, telefono, cedula, edad, ciudad, provincia, email, contrasena, monto)
-            insert_query = "INSERT INTO cliente (id_usuario ,nombre, apellido, telefono, cedula, edad, ciudad_residencia, provincia_residencia, email, password, monto) VALUES ("+values+")"            
+            insert_query = "CALL AgregarCliente("+values+")"            
             print(insert_query)
             sql.execute(insert_query)
             self.cnn.commit()
@@ -151,7 +151,7 @@ class Base:
         try:
             sql = self.cnn.cursor()
             values = "\"{}\", \"{}\", \"{}\", \"{}\", {}, \"{}\"".format(num_cuenta, tipo, cedula, banco, 1, id_usuario)
-            insert_query = "INSERT INTO cuenta_bancaria (num_cuenta ,tipo_cuenta, cedula_dueño, banco, estado, id_usuario) VALUES ("+values+")"
+            insert_query = insert_query = "CALL AgregarCuentaBancaria("+values+")"
             print(insert_query)
             sql.execute(insert_query)
             self.cnn.commit()
@@ -165,14 +165,8 @@ class Base:
         fecha=date(x[0],x[1],x[2])
         try:
             sql = self.cnn.cursor()
-            insert_query = (
-                "INSERT INTO pronostico_deportivo "
-                "(id_pronostico,monto_apuesta,valor_multiplicativo,ganancia,fecha_apuesta,id_usuario,id_enfrentamiento) "
-                "VALUES ('{}', {}, {}, {}, %s, %s, %s)".format(
-                    id_pronostico, monto_apuesta, valor_multiplicativo, ganancia
-                )
-            )
-            values = (fecha, id_usuario, id_enfrentamiento)
+            insert_query = "CALL AgregarPronostico(%s, %s, %s, %s, %s, %s, %s)"
+            values = (id_pronostico, monto_apuesta, valor_multiplicativo, ganancia, fecha, id_usuario, id_enfrentamiento)
             sql.execute(insert_query, values)
             self.cnn.commit()
             sql.close()

@@ -368,6 +368,59 @@ END
 DELIMITER ;
 
 
+
+DELIMITER //
+CREATE PROCEDURE AgregarCliente(
+    IN p_id_usuario VARCHAR(5),
+    IN p_nombre VARCHAR(30),
+    IN p_apellido VARCHAR(30),
+    IN p_telefono CHAR(10),
+    IN p_cedula CHAR(10),
+    IN p_edad INT,
+    IN p_ciudad_residencia VARCHAR(25),
+    IN p_provincia_residencia VARCHAR(25),
+    IN p_email VARCHAR(250),
+    IN p_password VARCHAR(10),
+    IN p_monto FLOAT
+)
+BEGIN
+    INSERT INTO cliente (id_usuario, nombre, apellido, telefono, cedula, edad, ciudad_residencia, provincia_residencia, email, password, monto)
+    VALUES (p_id_usuario, p_nombre, p_apellido, p_telefono, p_cedula, p_edad, p_ciudad_residencia, p_provincia_residencia, p_email, p_password, p_monto);
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE AgregarCuentaBancaria(
+    IN p_num_cuenta VARCHAR(5),
+    IN p_tipo_cuenta VARCHAR(25),
+    IN p_cedula_dueño VARCHAR(10),
+    IN p_banco VARCHAR(100),
+    IN p_estado BOOLEAN,
+    IN p_id_usuario VARCHAR(5)
+)
+BEGIN
+    INSERT INTO cuenta_bancaria (num_cuenta, tipo_cuenta, cedula_dueño, banco, estado, id_usuario)
+    VALUES (p_num_cuenta, p_tipo_cuenta, p_cedula_dueño, p_banco, p_estado, p_id_usuario);
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE AgregarPronostico(
+    IN p_id_pronostico VARCHAR(5),
+    IN p_monto_apuesta FLOAT,
+    IN p_valor_multiplicativo FLOAT,
+    IN p_ganancia FLOAT,
+    IN p_fecha_apuesta DATE,
+    IN p_id_usuario VARCHAR(5),
+    IN p_id_enfrentamiento VARCHAR(5)
+)
+BEGIN
+    INSERT INTO pronostico_deportivo (id_pronostico, monto_apuesta, valor_multiplicativo, ganancia, fecha_apuesta, id_usuario, id_enfrentamiento)
+    VALUES (p_id_pronostico, p_monto_apuesta, p_valor_multiplicativo, p_ganancia, p_fecha_apuesta, p_id_usuario, p_id_enfrentamiento);
+END //
+DELIMITER ;
+
+
 #View
 CREATE VIEW mostrarMovimientos(Cedula, Nombre, Apellido, Tipo_de_movimiento, Monto, Banco) AS
     SELECT c.cedula, c.nombre, c.apellido, m.tipo_movimiento, m.monto, (SELECT ct.banco
@@ -388,6 +441,40 @@ CREATE VIEW mostrarPremios(Usuario, Nombre_Sorteo, Cupon_Ganador, Premio, Fecha_
                                                         c.id_cupon, p.premio, p.fechasorteo
     FROM cupones AS c JOIN paradas AS p 
     ON c.id_cupon = p.cupon_ganador;
+    
+CREATE VIEW juegos_ganados_por_equipo AS
+    SELECT 
+        d.tipo_deporte,
+        c.id_competidor,
+        c.nombre,
+        COUNT(DISTINCT e.id_enfrentamiento) AS juegos_ganados
+    FROM 
+        competidor c
+    JOIN 
+        enfrentamiento_deportivo e ON c.id_competidor IN (e.id_competidora, e.id_competidorb) AND e.resultado IS NOT NULL
+    JOIN 
+        juego_deportivo d ON e.id_juego = d.id_juego
+    GROUP BY 
+            d.tipo_deporte, c.id_competidor, c.nombre
+    ORDER BY 
+        d.tipo_deporte, juegos_ganados DESC;
+    
+
+CREATE VIEW pronosticos_por_deporte AS
+    SELECT
+        jd.tipo_deporte,
+        COUNT(pd.id_pronostico) AS numero_pronosticos
+    FROM
+        juego_deportivo jd
+    LEFT JOIN
+        enfrentamiento_deportivo ed ON jd.id_juego = ed.id_juego
+    LEFT JOIN
+        pronostico_deportivo pd ON ed.id_enfrentamiento = pd.id_enfrentamiento
+    GROUP BY
+        jd.tipo_deporte
+    ORDER BY
+        jd.tipo_deporte;
+
 
 
 #Usuarios
