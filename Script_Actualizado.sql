@@ -384,8 +384,11 @@ CREATE PROCEDURE AgregarCliente(
     IN p_monto FLOAT
 )
 BEGIN
+    START TRANSACTION;
     INSERT INTO cliente (id_usuario, nombre, apellido, telefono, cedula, edad, ciudad_residencia, provincia_residencia, email, password, monto)
     VALUES (p_id_usuario, p_nombre, p_apellido, p_telefono, p_cedula, p_edad, p_ciudad_residencia, p_provincia_residencia, p_email, p_password, p_monto);
+    ROLLBACK;
+    COMMIT;
 END //
 DELIMITER ;
 
@@ -399,8 +402,11 @@ CREATE PROCEDURE AgregarCuentaBancaria(
     IN p_id_usuario VARCHAR(5)
 )
 BEGIN
+    START TRANSACTION;
     INSERT INTO cuenta_bancaria (num_cuenta, tipo_cuenta, cedula_dueño, banco, estado, id_usuario)
     VALUES (p_num_cuenta, p_tipo_cuenta, p_cedula_dueño, p_banco, p_estado, p_id_usuario);
+    ROLLBACK;
+    COMMIT;
 END //
 DELIMITER ;
 
@@ -415,8 +421,11 @@ CREATE PROCEDURE AgregarPronostico(
     IN p_id_enfrentamiento VARCHAR(5)
 )
 BEGIN
+    START TRANSACTION;
     INSERT INTO pronostico_deportivo (id_pronostico, monto_apuesta, valor_multiplicativo, ganancia, fecha_apuesta, id_usuario, id_enfrentamiento)
     VALUES (p_id_pronostico, p_monto_apuesta, p_valor_multiplicativo, p_ganancia, p_fecha_apuesta, p_id_usuario, p_id_enfrentamiento);
+    ROLLBACK;
+    COMMIT;
 END //
 DELIMITER ;
 
