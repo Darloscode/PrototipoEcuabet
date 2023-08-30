@@ -129,8 +129,51 @@ class Base:
             print("Cambios guardados exitosamente.")
         except mysql.connector.Error as err:
             print(f"Error al actualizar el cliente: {err}")
+   
+    def obtener_cuentaB(self, id_cuenta):
+        sql = self.cnn.cursor()
+        sql.execute("SELECT * FROM cuenta_bancaria WHERE num_cuenta =" + "'" + id_cuenta + "'")
+        cuenta = sql.fetchone()
+        sql.close()
+        return cuenta
+    
+    def editar_cuentaB(self, id_cuenta, datos_cuenta):
+        try:
+            sql = self.cnn.cursor()
+            update_query = "UPDATE cuentas_bancarias SET tipo_cuenta = %s, cedula = %s, banco = %s, estado = %s WHERE id_cuenta = %s"
+            valores_cuentaB = (
+                datos_cuenta["tipo_cuenta"],
+                datos_cuenta["cedula"],
+                datos_cuenta["banco"],
+                datos_cuenta["estado"],
+                id_cuenta
+            )
+            sql.execute(update_query, valores_cuentaB)
+            self.cnn.commit()
+            sql.close()
+            print("Cambios en la cuenta guardados exitosamente.")
+        except mysql.connector.Error as err:
+            print(f"Error al actualizar la cuenta bancaria: {err}")   
 
-        
+    def editar_clienteSP(self, nombre, apellido, telefono, cedula, ciudad_resisdencia, provincia_residencia, email, password):
+        sql = self.cnn.cursor()
+        sql.execute("call agregarCliente(" + "\"" + nombre + "\", \"" + apellido + "\", \"" + telefono + "\", \"" + cedula + "\", \"" + ciudad_resisdencia + "\", \"" + provincia_residencia + "\", \"" + email + "\", \"" + password + "\");")
+        self.cnn.commit()
+        sql.close()
+
+    def editar_cuentaBSP(self, tipoCuenta, cedula, banco, estado):
+        sql = self.cnn.cursor()
+        sql.execute("call agregarCuentaBancaria(" + tipoCuenta + ", \"" + cedula + "\", " + banco + ", " + estado + ");")
+        self.cnn.commit()
+        sql.close()
+
+    #def agregar_pronosticoSP(self, idCliente, descripcion, fechaPronostico):
+        #sql = self.cnn.cursor()
+        #sql.execute("call agregarPronostico(" + str(idCliente) + ", \"" + descripcion + "\", \"" + fechaPronostico + "\");")
+        #self.cnn.commit()
+        #sql.close()
+
+    
     #LUIS
     def insertar_cliente(self, id_usuario ,nombre, apellido, telefono, cedula, edad, ciudad, provincia, email, contrasena, monto):
         #Aquí hice cambios
@@ -174,27 +217,3 @@ class Base:
         except mysql.connector.Error as err:
             print(f"Error al agregar el pronóstico: {err}")
 
-    def obtener_cuentaB(self, id_cuenta):
-        sql = self.cnn.cursor()
-        sql.execute("SELECT * FROM cuenta_bancaria WHERE num_cuenta =" + "'" + id_cuenta + "'")
-        cuenta = sql.fetchone()
-        sql.close()
-        return cuenta
-    
-    def editar_cuentaB(self, id_cuenta, datos_cuenta):
-        try:
-            sql = self.cnn.cursor()
-            update_query = "UPDATE cuentas_bancarias SET tipo_cuenta = %s, cedula = %s, banco = %s, estado = %s WHERE id_cuenta = %s"
-            valores_cuentaB = (
-                datos_cuenta["tipo_cuenta"],
-                datos_cuenta["cedula"],
-                datos_cuenta["banco"],
-                datos_cuenta["estado"],
-                id_cuenta
-            )
-            sql.execute(update_query, valores_cuentaB)
-            self.cnn.commit()
-            sql.close()
-            print("Cambios en la cuenta guardados exitosamente.")
-        except mysql.connector.Error as err:
-            print(f"Error al actualizar la cuenta bancaria: {err}")
