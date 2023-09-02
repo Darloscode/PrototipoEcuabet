@@ -18,7 +18,7 @@ class Ventana(Frame):
         self.create_widgets()      
         self.grid = ttk.Treeview(columns=("col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8","col9","col10"))
         self.btnEliminar = Button(self, text="", command = self.eliminarCliente, bg="#bfdaff", fg="black")
-        self.btnEditar = Button(self, text="", command = self.editarCliente, bg="#bfdaff", fg="black")
+        self.btnEditar = Button(self, text="", command = self.mostrarVentanaEditarCuentaB, bg="#bfdaff", fg="black")
         self.btnAgregar = Button(self, text="", command = self.mostrarVentanaAgregarCliente, bg="#bfdaff", fg="black")
 
         
@@ -82,7 +82,7 @@ class Ventana(Frame):
         self.btnAgregar = Button(self, text="Agregar", command = self.mostrarVentanaAgregarCliente, bg="#bfdaff", fg="black")
         self.btnAgregar.place(x=100,y=250,width=170, height=30 )
 
-        self.btnEditar = Button(self, text="Editar", command = self.editarCliente, bg="#bfdaff", fg="black")
+        self.btnEditar = Button(self, text="Editar", command = self.mostrarVentanaEditarCliente, bg="#bfdaff", fg="black")
         self.btnEditar.place(x=600,y=250,width=170, height=30 )
      
     def mostrarCuentas(self): 
@@ -124,7 +124,7 @@ class Ventana(Frame):
         self.btnAgregar = Button(self, text="Agregar", command = self.mostrarVentanaAgregarCuenta, bg="#bfdaff", fg="black")
         self.btnAgregar.place(x=100,y=250,width=170, height=30 )
 
-        self.btnEditar = Button(self, text="Editar", command = self.editarCliente, bg="#bfdaff", fg="black")
+        self.btnEditar = Button(self, text="Editar", command = self.mostrarVentanaEditarCuentaB, bg="#bfdaff", fg="black")
         self.btnEditar.place(x=600,y=250,width=170, height=30 )
                 
     def mostrasPronosticos(self):
@@ -159,7 +159,7 @@ class Ventana(Frame):
         self.btnAgregar = Button(self, text="Agregar", command = self.mostrarVentanaAgregarPronostico, bg="#bfdaff", fg="black")
         self.btnAgregar.place(x=100,y=250,width=170, height=30 )
 
-        self.btnEditar = Button(self, text="Editar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnEditar = Button(self, text="Editar", command = self.mostrarVentanaEditarPronostico, bg="#bfdaff", fg="black")
         self.btnEditar.place(x=600,y=250,width=170, height=30 )
 
         pass
@@ -236,6 +236,8 @@ class Ventana(Frame):
                     messagebox.showinfo("Eliminar", 'No se ha podido eliminar')
         pass
     
+
+    #Métodos de llenado
     def llenarDatosClientes(self):
         datos = self.datos.consulta_cliente()
         for d in datos:
@@ -255,6 +257,7 @@ class Ventana(Frame):
                 self.grid.insert("", END, text=d[0], values=(d[1],d[2],d[3],'Inactivo',d[5])) 
 
 
+    #Crear la ventana principal
     def create_widgets(self):        
         frame1 = Frame(self, bg="")
         frame1.place(x=0, y=0, width=880, height=30)
@@ -268,7 +271,12 @@ class Ventana(Frame):
         self.btnPronost = Button(frame1, text="Pronosticos", command = self.mostrasPronosticos, bg="#bfdaff", fg="black")
         self.btnPronost.place(x=280,y=2,width=130, height=30)
 
-#luis
+    #Destruir ventana creada
+    def destruirVentana(self, ventana):
+        ventana.destroy()
+
+
+#Luis
     def mostrarVentanaAgregarCliente(self):
         ventana_agregar = Toplevel(self.master)
         ventana_agregar.title("Agregar Cliente")
@@ -328,8 +336,7 @@ class Ventana(Frame):
         lbl_monto.pack()
         entry_monto = Entry(ventana_agregar)
         entry_monto.pack()
-
-        #En el botón también tiene un cambio    
+        
         btn_guardar = Button(ventana_agregar, text="Guardar", 
                              command=lambda: [self.guardarNuevoCliente(entry_id.get(), 
                                                                       entry_nombre.get(), 
@@ -345,14 +352,10 @@ class Ventana(Frame):
                                                 self.destruirVentana(ventana_agregar)])
         btn_guardar.pack()
 
-    #Agregué este método para no duplicar codigo 
-    def destruirVentana(self, ventana):
-        ventana.destroy()
-
-    #Aquí hice cambios
+    #Enviar datos a bd
     def guardarNuevoCliente(self, id_usuario, nombre, apellido, telefono, cedula, edad, ciudad, provincia, email, contrasena, monto):            
         self.datos.insertar_cliente(id_usuario, nombre, apellido, telefono, cedula, int(edad), ciudad, provincia, email, contrasena, float(monto))        
-                
+
     def mostrarVentanaAgregarCuenta(self):
         ventana_agregar_cuenta = Toplevel(self.master)
         ventana_agregar_cuenta.title("Agregar Cuenta")
@@ -388,17 +391,18 @@ class Ventana(Frame):
 
         entry_id_usuario = Entry(ventana_agregar_cuenta)
         entry_id_usuario.pack()
-#cambios en guardar
+
         btn_guardar = Button(ventana_agregar_cuenta, text="Guardar", 
-                             command=lambda: [self.agregarCuenta(entry_numero_cuenta.get(), 
+                             command=lambda: [self.guardarNuevaCuenta(entry_numero_cuenta.get(), 
                                                                       entry_tipo_cuenta.get(), 
                                                                       entry_cedula.get(), 
                                                                       entry_banco.get(), 
                                                                       entry_id_usuario.get()),
                                                 self.destruirVentana(ventana_agregar_cuenta)])
         btn_guardar.pack()
- 
-    def agregarCuenta(self, numero_cuenta, tipo_cuenta, cedula_dueño, banco, id_usuario):
+    
+    #Enviar datos a bd
+    def guardarNuevaCuenta(self, numero_cuenta, tipo_cuenta, cedula_dueño, banco, id_usuario):
         self.datos.insertar_cuenta(numero_cuenta, tipo_cuenta, cedula_dueño, banco, id_usuario)
 
     def mostrarVentanaAgregarPronostico(self):
@@ -453,115 +457,72 @@ class Ventana(Frame):
                                                 self.destruirVentana(ventana_agregar)])
         btn_guardar.pack()
 
+    #Enviar datos a bd
     def guardarNuevoPronostico(self,id_pronostico,monto_apuesta,valor_multiplicativo,ganancia,fecha_apuesta,id_usuario,id_enfrentamiento):
         self.datos.insertar_pronostico(id_pronostico,monto_apuesta,valor_multiplicativo,ganancia,fecha_apuesta,id_usuario,id_enfrentamiento)
-    
 
-#SHEYLA 
-    #Este método está repetido
-    def mostrarVentanaEdicionCliente(self, cliente):
-        if cliente == '':
-            print("El cliente no se encontró en la base de datos.")
-            return
 
-        ventana_edicion = Toplevel(self)
-        ventana_edicion.title("Editar Cliente")
-
-        frame_editar= tk.Frame(ventana_edicion)
-        frame_editar.pack() 
-
-        label_nombre = Label(ventana_edicion, text="Nombre:")
-        entry_nombre = Entry(ventana_edicion)
-        entry_nombre.insert(0, cliente[1])
-        label_nombre.grid(row=0, column=0)
-        entry_nombre.grid(row=0, column=1)
-
-        label_apellido = Label(ventana_edicion, text="Apellido:")
-        entry_apellido = Entry(ventana_edicion)
-        entry_apellido.insert(0, cliente[2])
-        label_apellido.grid(row=1, column=0)
-        entry_apellido.grid(row=1, column=1)
-
-        label_telefono = Label(ventana_edicion, text="Teléfono:")
-        entry_telefono = Entry(ventana_edicion)
-        entry_telefono.insert(0, cliente[3]) 
-
-        label_telefono.grid(row=2, column=0)
-        entry_telefono.grid(row=2, column=1)
-
-        label_ciudad = Label(ventana_edicion, text="Ciudad Residencia:")
-        entry_ciudad = Entry(ventana_edicion)
-        entry_ciudad.insert(0, cliente[6])  # Mostrar valor actual
-        label_ciudad.grid(row=3, column=0)
-        entry_ciudad.grid(row=3, column=1)
-
-        label_provincia = Label(ventana_edicion, text="Provincia Residencia:")
-        entry_provincia = Entry(ventana_edicion)
-        entry_provincia.insert(0, cliente[7])  # Mostrar valor actual
-        label_provincia.grid(row=4, column=0)
-        entry_provincia.grid(row=4, column=1)
-
-        label_email = Label(ventana_edicion, text="Email:")
-        entry_email = Entry(ventana_edicion)
-        entry_email.insert(0, cliente[8])  # Mostrar valor actual
-        label_email.grid(row=5, column=0)
-        entry_email.grid(row=5, column=1)
-        
-        boton_guardar = Button(self.ventana_edicion, text="Guardar cambios",commad= lambda: self.guardar_cambios(cliente[0], ventana_edicion, ))
-        boton_guardar.grid(row=6, columnspan=2)
-
-    def editarCliente(self):                
-        selected = self.grid.focus()     
+#Sheyla
+    def mostrarVentanaEditarCliente(self):                
+        selected = self.grid.focus() 
         if not selected:
             messagebox.showwarning("Guardar Cambios Cliente", "Debes seleccionar un cliente")            
         else:
-            ventana_agregar = Toplevel(self.master)
-            ventana_agregar.title("Editar Cliente")
-            ventana_agregar.geometry("800x800")
+            ventana_edicionCliente = Toplevel(self.master)
+            ventana_edicionCliente.title("Editar Cliente")
+            ventana_edicionCliente.geometry("800x800")
+            
+            valores = self.grid.item(selected, 'values') 
 
-            lbl_nombre = Label(ventana_agregar, text="Nombre:")
+            lbl_nombre = Label(ventana_edicionCliente, text="Nombre:")
             lbl_nombre.pack()
-            entry_nombre = Entry(ventana_agregar)
+            entry_nombre = Entry(ventana_edicionCliente)
+            entry_nombre.insert(0, valores[0])
             entry_nombre.pack()
 
-            lbl_apellido = Label(ventana_agregar, text="Apellido:")
+            lbl_apellido = Label(ventana_edicionCliente, text="Apellido:")
             lbl_apellido.pack()
-            entry_apellido = Entry(ventana_agregar)
+            entry_apellido = Entry(ventana_edicionCliente)
+            entry_apellido.insert(0, valores[1])
             entry_apellido.pack()
 
-            lbl_telefono = Label(ventana_agregar, text="Teléfono:")
+            lbl_telefono = Label(ventana_edicionCliente, text="Teléfono:")
             lbl_telefono.pack()
-            entry_telefono = Entry(ventana_agregar)
+            entry_telefono = Entry(ventana_edicionCliente)
+            entry_telefono.insert(0, valores[2])
             entry_telefono.pack()
 
-            lbl_cedula = Label(ventana_agregar, text="Cédula:")
+            lbl_cedula = Label(ventana_edicionCliente, text="Cédula:")
             lbl_cedula.pack()
-            entry_cedula = Entry(ventana_agregar)
+            entry_cedula = Entry(ventana_edicionCliente)
+            entry_cedula.insert(0, valores[3])
             entry_cedula.pack()
 
-            lbl_ciudad = Label(ventana_agregar, text="Ciudad:")
+            lbl_ciudad = Label(ventana_edicionCliente, text="Ciudad:")
             lbl_ciudad.pack()
-            entry_ciudad = Entry(ventana_agregar)
+            entry_ciudad = Entry(ventana_edicionCliente)
+            entry_ciudad.insert(0, valores[5])
             entry_ciudad.pack()
 
-            lbl_provincia = Label(ventana_agregar, text="Provincia:")
+            lbl_provincia = Label(ventana_edicionCliente, text="Provincia:")
             lbl_provincia.pack()
-            entry_provincia = Entry(ventana_agregar)
+            entry_provincia = Entry(ventana_edicionCliente)
+            entry_provincia.insert(0, valores[6])
             entry_provincia.pack()
 
-            lbl_email = Label(ventana_agregar, text="Email:")
+            lbl_email = Label(ventana_edicionCliente, text="Email:")
             lbl_email.pack()
-
-            entry_email = Entry(ventana_agregar)
+            entry_email = Entry(ventana_edicionCliente)
+            entry_email.insert(0, valores[7])
             entry_email.pack()
 
-            lbl_contraseña = Label(ventana_agregar, text="Contraseña:")
+            lbl_contraseña = Label(ventana_edicionCliente, text="Contraseña:")
             lbl_contraseña.pack()
-
-            entry_contraseña= Entry(ventana_agregar)
+            entry_contraseña= Entry(ventana_edicionCliente)
+            entry_contraseña.insert(0, valores[8])
             entry_contraseña.pack()
 
-            btnGuardarCliente = Button(ventana_agregar, text="Guardar Cambios Cliente", 
+            btnGuardarCambiosCliente = Button(ventana_edicionCliente, text="Guardar Cambios", 
                                        command=lambda: [self.guardarCambiosCliente(entry_nombre.get(),
                                                                                     entry_apellido.get(),
                                                                                     entry_telefono.get(),
@@ -569,118 +530,115 @@ class Ventana(Frame):
                                                                                     entry_ciudad.get(),
                                                                                     entry_provincia.get(),
                                                                                     entry_email.get(),
-                                                                                    entry_contraseña.get()), self.destruirVentana(ventana_agregar)], bg="#bfdaff", fg="black")
-        
-            btnGuardarCliente.pack()
+                                                                                    entry_contraseña.get()), self.destruirVentana(ventana_edicionCliente)], bg="#bfdaff", fg="black")
+            btnGuardarCambiosCliente.pack()
 
+    #Enviar datos a bd
     def guardarCambiosCliente(self, nombre, apellido, telefono, cedula, ciudad, provincia, email, contraseña):
+        selected = self.grid.focus()                
+        cliente_id = self.grid.item(selected, 'text')
+
+        nuevos_datos = {
+            "nombre": nombre,
+            "apellido": apellido,
+            "telefono": telefono,
+            "cedula": cedula,
+            "ciudad": ciudad,
+            "provincia": provincia,
+            "email": email,
+            "contraseña": contraseña
+            }
+            
+        self.datos.editar_cliente(cliente_id, nuevos_datos)   
+        self.limpiarGrid()
+        self.llenarDatosClientes()
+    
+    def mostrarVentanaEditarCuentaB(self):        
         selected = self.grid.focus()
         if not selected:
-            messagebox.showwarning("Guardar Cambios Cliente", "Debes seleccionar un cliente")
+            messagebox.showwarning("Guardar Cambios Cuentas Bancarias", "Debes seleccionar una cuenta bancaria")            
         else:
-            cliente_id = self.grid.item(selected, 'text')            
-            nuevos_datos = {
-                "nombre": nombre,
-                "apellido": apellido,
-                "telefono": telefono,
-                "cedula": cedula,
-                "ciudad": ciudad,
-                "provincia": provincia,
-                "email": email,
-                "contraseña": contraseña
-                }
+            ventana_edicionCuenta = Toplevel(self.master)
+            ventana_edicionCuenta.title("Editar Cuenta Bancaria")
+            ventana_edicionCuenta.geometry("800x800")
             
-            self.datos.editar_cliente(cliente_id, nuevos_datos)   
-            self.limpiarGrid()
-            self.llenarDatosClientes()
-    
-    def mostrarVentanaEdicionCuentaB(self, id_cuenta):
-        if id_cuenta=='':
-            print("La cuenta no se encontró en la base de datos.")
-            return
-        ventana_edicionCuenta= Toplevel(self)
-        ventana_edicionCuenta.title("Editar Cuenta Bancaria")
+            valores = self.grid.item(selected, 'values')
+            clave = self.grid.item(selected, 'text')
 
-        frame_editarCuenta= tk.Frame(ventana_edicionCuenta)
-        frame_editarCuenta.pack()
+            label_tipoCuenta= Label(ventana_edicionCuenta, text="Tipo de Cuenta:")
+            label_tipoCuenta.pack()
+            entry_tipoCuenta = Entry(ventana_edicionCuenta)
+            entry_tipoCuenta.insert(0, valores[0])
+            entry_tipoCuenta.pack()            
 
-        label_tipoCuenta= Label(ventana_edicionCuenta, text="Tipo de Cuenta:")
-        entry_tipoCuenta = Entry(ventana_edicionCuenta)
-        entry_tipoCuenta.insert(0, id_cuenta[1])
-        label_tipoCuenta.grid(row=0, column=0)
-        entry_tipoCuenta.grid(row=0, column=1)
-
-        label_cedula= Label(ventana_edicionCuenta, text="Cedula:")
-        entry_cedula = Entry(ventana_edicionCuenta)
-        entry_cedula.insert(0, id_cuenta[2])
-        label_cedula.grid(row=1, column=0)
-        entry_cedula.grid(row=1, column=1)
-
-        label_banco= Label(ventana_edicionCuenta, text="Banco:")
-        entry_banco = Entry(ventana_edicionCuenta)
-        entry_banco.insert(0, id_cuenta[3])
-        label_banco.grid(row=1, column=0)
-        entry_banco.grid(row=1, column=1)
-
-        label_estado= Label(ventana_edicionCuenta, text="Estado:")
-        entry_estado = Entry(ventana_edicionCuenta)
-        entry_estado.insert(0, id_cuenta[4])
-        label_estado.grid(row=2, column=0)
-        entry_estado.grid(row=2, column=1)
-
-        boton_guardar_CuentaB= Button(self.ventana_edicionCuenta, text="Guardar Cambios", command=lambda: self.guardar_cambioCuentaB(id_cuenta[0], ventana_edicionCuenta))
-        boton_guardar_CuentaB.grid(row=6, columnspan=2)
-
-    def editarCuentaB(self):
-        selected= self.grid.focus()
-        if not selected:
-            messagebox.showwarning("Guardar cambios cuenta", "Debes seleccionar una cuenta")          
-        else:
-            ventana_agregarCuentaB= Toplevel(self.master)
-            ventana_agregarCuentaB.title("Editar Cuenta")
-            ventana_agregarCuentaB.geometry("800x800")
-
-            lbl_tipoCuenta= Label(ventana_agregarCuentaB, text="Tipo de cuenta:")
-            lbl_tipoCuenta.pack()
-            entry_tipoCuenta= Entry(ventana_agregarCuentaB)
-            entry_tipoCuenta.pack()
-
-            lbl_cedula= Label(ventana_agregarCuentaB, text="Cedula:")
-            lbl_cedula.pack()
-            entry_cedula= Entry(ventana_agregarCuentaB)
+            label_cedula= Label(ventana_edicionCuenta, text="Cedula:")
+            label_cedula.pack()
+            entry_cedula = Entry(ventana_edicionCuenta)
+            entry_cedula.insert(0, valores[1])
             entry_cedula.pack()
 
-            lbl_banco= Label(ventana_agregarCuentaB, text="Banco:")
-            lbl_banco.pack()
-            entry_banco= Entry(ventana_agregarCuentaB)
-            entry_banco.pack()
+            label_banco= Label(ventana_edicionCuenta, text="Banco:")
+            label_banco.pack()
+            entry_banco = Entry(ventana_edicionCuenta)
+            entry_banco.insert(0, valores[2])            
+            entry_banco.pack()            
 
-            lbl_estado= Label(ventana_agregarCuentaB, text="Estado:")
-            lbl_estado.pack()
-            entry_estado= Entry(ventana_agregarCuentaB)
-            entry_estado.pack()
+            btnGuardarCambiosCuentaB= Button(ventana_edicionCuenta, text="Guardar Cambios", command=lambda: [self.guardarCambiosCuentaB(entry_tipoCuenta.get(),                                                                                                                                        
+                                                                                                                                        entry_cedula.get(),                                                                                                                                        
+                                                                                                                                        entry_banco.get(),
+                                                                                                                                        clave), self.destruirVentana(ventana_edicionCuenta)],bg="#bfdaff", fg="black")
+            btnGuardarCambiosCuentaB.pack()                                    
 
-
-            btnGuardarCambiosCuentaB= Button(ventana_agregarCuentaB, text="Guardar cambios cuenta", command=lambda: [self.guardarCambiosCuentaB(entry_tipoCuenta.get(),
-                                                                                                                                                entry_cedula.get(),
-                                                                                                                                                entry_banco.get(),
-                                                                                                                                                entry_estado.get()), self.destruirVentana(ventana_agregarCuentaB)],bg="#bfdaff", fg="black")
-            btnGuardarCambiosCuentaB.pack()
-    
-    def guardarCambiosCuentaB(self, tipoCuenta, cedula, banco, estado):
-        selected= self.grid.focus()
-        if not selected:
-            messagebox.showwarning("Guardar Cambios Cuenta", "Debes seleccionar una Cuenta")
-        else:
-            id_cuenta= self.grid(selected, 'text')
-            datos_cuenta= {
-                "tipo de cuenta": tipoCuenta,
-                "cedula": cedula,
-                "banco": banco,
-                "estado": estado
-            }
-        self.datos.editar_cuenta(id_cuenta, datos_cuenta)
+    #Enviar datos a bd
+    def guardarCambiosCuentaB(self, tipoCuenta, cedula, banco, cuenta_ac):                     
+        datos_cuenta= {
+            "tipo de cuenta": tipoCuenta,            
+            "cedula": cedula,            
+            "banco": banco,            
+        }
+        
+        self.datos.editar_cuentaB(cuenta_ac, datos_cuenta)
+        messagebox.showinfo("Actualizar", 'Registro actualizado correctamente')
         self.limpiarGrid()
         self.llenarDatosCuentas()
 
+    def mostrarVentanaEditarPronostico(self):        
+        selected = self.grid.focus()
+        if not selected:
+            messagebox.showwarning("Guardar Cambios Pronostico", "Debes seleccionar un pronostico")            
+        else:
+            ventana_edicionPronostico = Toplevel(self.master)
+            ventana_edicionPronostico.title("Editar Pronostico")
+            ventana_edicionPronostico.geometry("800x800")
+            
+            valores = self.grid.item(selected, 'values')
+            clave = self.grid.item(selected, 'text')
 
+            label_monto= Label(ventana_edicionPronostico, text="Monto de apuesta:")
+            label_monto.pack()
+            entry_monto = Entry(ventana_edicionPronostico)
+            entry_monto.insert(0, valores[0])
+            entry_monto.pack()            
+
+            label_valorm= Label(ventana_edicionPronostico, text="Valor multiplicativo:")
+            label_valorm.pack()
+            entry_valorm = Entry(ventana_edicionPronostico)
+            entry_valorm.insert(0, valores[1])
+            entry_valorm.pack()
+    
+            btnGuardarCambiosPronostico= Button(ventana_edicionPronostico, text="Guardar Cambios", command=lambda: [self.guardarCambiosPronostico(entry_monto.get(),                                                                                                                                        
+                                                                                                                                            entry_valorm.get(),
+                                                                                                                                            clave), self.destruirVentana(ventana_edicionPronostico)],bg="#bfdaff", fg="black")
+            btnGuardarCambiosPronostico.pack()                                    
+
+    #Enviar datos a bd
+    def guardarCambiosPronostico(self, monto, valorm, id_pronostico):                     
+        datos_cuenta= {
+            "monto": monto,            
+            "valorm": valorm,                       
+        }
+        
+        self.datos.editar_pronostico(id_pronostico, datos_cuenta)        
+        self.limpiarGrid()
+        messagebox.showinfo("Actualizar", 'Registro actualizado correctamente')
+        self.llenarDatosPronosticos()

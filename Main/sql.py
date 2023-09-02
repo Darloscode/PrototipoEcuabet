@@ -137,23 +137,40 @@ class Base:
         sql.close()
         return cuenta
     
-    def editar_cuentaB(self, id_cuenta, datos_cuenta):
+    def editar_cuentaB(self, cuenta_ac, datos_cuenta):
         try:
             sql = self.cnn.cursor()
-            update_query = "UPDATE cuentas_bancarias SET tipo_cuenta = %s, cedula = %s, banco = %s, estado = %s WHERE id_cuenta = %s"
+
+            update_query = "UPDATE cuenta_bancaria SET tipo_cuenta = %s, cedula_dueño = %s, banco = %s WHERE num_cuenta = %s"
             valores_cuentaB = (
-                datos_cuenta["tipo_cuenta"],
+                datos_cuenta["tipo de cuenta"],                
                 datos_cuenta["cedula"],
                 datos_cuenta["banco"],
-                datos_cuenta["estado"],
-                id_cuenta
+                cuenta_ac
             )
             sql.execute(update_query, valores_cuentaB)
             self.cnn.commit()
             sql.close()
-            print("Cambios en la cuenta guardados exitosamente.")
+            print("Cambios en la cuenta bancaria guardados exitosamente")
         except mysql.connector.Error as err:
             print(f"Error al actualizar la cuenta bancaria: {err}")   
+
+    def editar_pronostico(self, id_pronostico, datos_cuenta):
+        try:
+            sql = self.cnn.cursor()
+
+            update_query = "UPDATE pronostico_deportivo SET monto_apuesta = %s, valor_multiplicativo = %s WHERE id_pronostico = %s"
+            valores_cuentaB = (
+                datos_cuenta["monto"],                
+                datos_cuenta["valorm"],
+                id_pronostico
+            )
+            sql.execute(update_query, valores_cuentaB)
+            self.cnn.commit()            
+            sql.close()
+            print("Cambios en el pronostico guardados exitosamente")
+        except mysql.connector.Error as err:
+            print(f"Error al actualizar la cuenta bancaria: {err}")
 
     def editar_clienteSP(self, nombre, apellido, telefono, cedula, ciudad_resisdencia, provincia_residencia, email, password):
         sql = self.cnn.cursor()
