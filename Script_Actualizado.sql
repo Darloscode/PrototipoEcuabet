@@ -335,8 +335,7 @@ BEGIN
     DELETE FROM pronostico_deportivo WHERE id_usuario = idCliente;
     DELETE FROM paradas WHERE cupon_ganador IN (SELECT id_cupon FROM cupones WHERE nombreDeUsuario = idCliente);
     DELETE FROM cupones WHERE nombreDeUsuario = idCliente;
-    DELETE FROM cliente WHERE id_usuario = idCliente;
-    ROLLBACK;
+    DELETE FROM cliente WHERE id_usuario = idCliente;    
     COMMIT;
 END
 /
@@ -348,8 +347,7 @@ CREATE PROCEDURE eliminarCuentaBancaria (IN cuenta VARCHAR(5))
 BEGIN
 	START TRANSACTION;
 	DELETE FROM movimiento_bancario WHERE num_cuenta = cuenta;
-    DELETE FROM cuenta_bancaria WHERE num_cuenta = cuenta;
-	ROLLBACK;
+    DELETE FROM cuenta_bancaria WHERE num_cuenta = cuenta;	
     COMMIT;
 END
 /
@@ -360,8 +358,7 @@ DELIMITER /
 CREATE PROCEDURE eliminarPronostico(IN idPronostico VARCHAR(5))
 BEGIN
 	START TRANSACTION;
-	DELETE FROM pronostico_deportivo WHERE id_pronostico = idPronostico;
-	ROLLBACK;
+	DELETE FROM pronostico_deportivo WHERE id_pronostico = idPronostico;	
     COMMIT;
 END
 /
@@ -370,7 +367,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE AgregarCliente(
+CREATE PROCEDURE agregarCliente(
     IN p_id_usuario VARCHAR(5),
     IN p_nombre VARCHAR(30),
     IN p_apellido VARCHAR(30),
@@ -380,20 +377,18 @@ CREATE PROCEDURE AgregarCliente(
     IN p_ciudad_residencia VARCHAR(25),
     IN p_provincia_residencia VARCHAR(25),
     IN p_email VARCHAR(250),
-    IN p_password VARCHAR(10),
-    IN p_monto FLOAT
+    IN p_password VARCHAR(10)
 )
 BEGIN
     START TRANSACTION;
-    INSERT INTO cliente (id_usuario, nombre, apellido, telefono, cedula, edad, ciudad_residencia, provincia_residencia, email, password, monto)
-    VALUES (p_id_usuario, p_nombre, p_apellido, p_telefono, p_cedula, p_edad, p_ciudad_residencia, p_provincia_residencia, p_email, p_password, p_monto);
-    ROLLBACK;
+    INSERT INTO cliente (id_usuario, nombre, apellido, telefono, cedula, edad, ciudad_residencia, provincia_residencia, email, password)
+    VALUES (p_id_usuario, p_nombre, p_apellido, p_telefono, p_cedula, p_edad, p_ciudad_residencia, p_provincia_residencia, p_email, p_password);
     COMMIT;
 END //
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE AgregarCuentaBancaria(
+CREATE PROCEDURE agregarCuentaBancaria(
     IN p_num_cuenta VARCHAR(5),
     IN p_tipo_cuenta VARCHAR(25),
     IN p_cedula_dueño VARCHAR(10),
@@ -404,14 +399,13 @@ CREATE PROCEDURE AgregarCuentaBancaria(
 BEGIN
     START TRANSACTION;
     INSERT INTO cuenta_bancaria (num_cuenta, tipo_cuenta, cedula_dueño, banco, estado, id_usuario)
-    VALUES (p_num_cuenta, p_tipo_cuenta, p_cedula_dueño, p_banco, p_estado, p_id_usuario);
-    ROLLBACK;
+    VALUES (p_num_cuenta, p_tipo_cuenta, p_cedula_dueño, p_banco, p_estado, p_id_usuario);    
     COMMIT;
 END //
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE AgregarPronostico(
+CREATE PROCEDURE agregarPronostico(
     IN p_id_pronostico VARCHAR(5),
     IN p_monto_apuesta FLOAT,
     IN p_valor_multiplicativo FLOAT,
@@ -423,8 +417,7 @@ CREATE PROCEDURE AgregarPronostico(
 BEGIN
     START TRANSACTION;
     INSERT INTO pronostico_deportivo (id_pronostico, monto_apuesta, valor_multiplicativo, ganancia, fecha_apuesta, id_usuario, id_enfrentamiento)
-    VALUES (p_id_pronostico, p_monto_apuesta, p_valor_multiplicativo, p_ganancia, p_fecha_apuesta, p_id_usuario, p_id_enfrentamiento);
-    ROLLBACK;
+    VALUES (p_id_pronostico, p_monto_apuesta, p_valor_multiplicativo, p_ganancia, p_fecha_apuesta, p_id_usuario, p_id_enfrentamiento);    
     COMMIT;
 END //
 DELIMITER ;

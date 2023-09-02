@@ -12,7 +12,7 @@ class Ventana(Frame):
     datos = Base()
 
     def __init__(self, master=None):
-        super().__init__(master,width=900, height=460)
+        super().__init__(master,width=1050, height=460)
         self.master = master
         self.pack()
         self.create_widgets()      
@@ -20,8 +20,7 @@ class Ventana(Frame):
         self.btnEliminar = Button(self, text="", command = self.eliminarCliente, bg="#bfdaff", fg="black")
         self.btnEditar = Button(self, text="", command = self.mostrarVentanaEditarCuentaB, bg="#bfdaff", fg="black")
         self.btnAgregar = Button(self, text="", command = self.mostrarVentanaAgregarCliente, bg="#bfdaff", fg="black")
-
-        
+    
     def eliminarColumnasGrid(self):                  
         self.grid.destroy()
         self.btnEliminar.destroy()
@@ -42,23 +41,12 @@ class Ventana(Frame):
         self.grid.column("col2", width=90, anchor=CENTER)
         self.grid.column("col3", width=90, anchor=CENTER)
         self.grid.column("col4", width=90, anchor=CENTER)
-        self.grid.column("col5", width=30, anchor=CENTER)
+        self.grid.column("col5", width=40, anchor=CENTER)
         self.grid.column("col6", width=90, anchor=CENTER)
         self.grid.column("col7", width=90, anchor=CENTER)
-        self.grid.column("col8", width=150, anchor=CENTER)
+        self.grid.column("col8", width=200, anchor=CENTER)
         self.grid.column("col9", width=90, anchor=CENTER)
-        self.grid.column("col10", width=90, anchor=CENTER)
-        self.grid.column("#0", width=60, anchor=CENTER)
-        self.grid.column("col1", width=70, anchor=CENTER)
-        self.grid.column("col2", width=90, anchor=CENTER)
-        self.grid.column("col3", width=90, anchor=CENTER)
-        self.grid.column("col4", width=90, anchor=CENTER)
-        self.grid.column("col5", width=30, anchor=CENTER)
-        self.grid.column("col6", width=90, anchor=CENTER)
-        self.grid.column("col7", width=90, anchor=CENTER)
-        self.grid.column("col8", width=150, anchor=CENTER)
-        self.grid.column("col9", width=90, anchor=CENTER)
-        self.grid.column("col10", width=90, anchor=CENTER)
+        self.grid.column("col10", width=40, anchor=CENTER)
 
         self.grid.heading("#0", text="Id", anchor=CENTER)
         self.grid.heading("col1", text="Nombre", anchor=CENTER)
@@ -72,32 +60,25 @@ class Ventana(Frame):
         self.grid.heading("col9", text="Contraseña", anchor=CENTER)
         self.grid.heading("col10", text="Monto", anchor=CENTER)
 
-        self.grid.place(x=18, y=35, width=860, height=200)
+        self.grid.place(x=34, y=37, width=980, height=200)
 
         self.llenarDatosClientes()
 
-        self.btnEliminar = Button(self, text="Eliminar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
-        self.btnEliminar.place(x=350,y=250,width=170, height=30 )
-
         self.btnAgregar = Button(self, text="Agregar", command = self.mostrarVentanaAgregarCliente, bg="#bfdaff", fg="black")
-        self.btnAgregar.place(x=100,y=250,width=170, height=30 )
+        self.btnAgregar.place(x=190,y=250,width=170, height=30 )
+
+        self.btnEliminar = Button(self, text="Eliminar", command = self.eliminarCliente, bg="#bfdaff", fg="black")
+        self.btnEliminar.place(x=440,y=250,width=170, height=30 )
 
         self.btnEditar = Button(self, text="Editar", command = self.mostrarVentanaEditarCliente, bg="#bfdaff", fg="black")
-        self.btnEditar.place(x=600,y=250,width=170, height=30 )
+        self.btnEditar.place(x=690,y=250,width=170, height=30 )
      
     def mostrarCuentas(self): 
 
         self.eliminarColumnasGrid()
 
-        self.grid = ttk.Treeview(columns=("col1", "col2", "col3", "col4", "col5"))
-        self.grid = ttk.Treeview(columns=("col1", "col2", "col3", "col4", "col5"))
+        self.grid = ttk.Treeview(columns=("col1", "col2", "col3", "col4", "col5"))        
 
-        self.grid.column("#0", width=3, anchor=CENTER)
-        self.grid.column("col1", width=30, anchor=CENTER)
-        self.grid.column("col2", width=20, anchor=CENTER)
-        self.grid.column("col3", width=10, anchor=CENTER)
-        self.grid.column("col4", width=10, anchor=CENTER)
-        self.grid.column("col5", width=10, anchor=CENTER)
         self.grid.column("#0", width=3, anchor=CENTER)
         self.grid.column("col1", width=30, anchor=CENTER)
         self.grid.column("col2", width=20, anchor=CENTER)
@@ -110,22 +91,20 @@ class Ventana(Frame):
         self.grid.heading("col2", text="Cedula", anchor=CENTER)
         self.grid.heading("col3", text="Banco", anchor=CENTER)
         self.grid.heading("col4", text="Estado", anchor=CENTER)
-        self.grid.heading("col3", text="Banco", anchor=CENTER)
-        self.grid.heading("col4", text="Estado", anchor=CENTER)
         self.grid.heading("col5", text="Estado", anchor=CENTER)
 
-        self.grid.place(x=70, y=35, width=760, height=200)
+        self.grid.place(x=143, y=37, width=760, height=200)
 
         self.llenarDatosCuentas()
 
         self.btnEliminar = Button(self, text="Eliminar", command = self.eliminarCuentaBancaria, bg="#bfdaff", fg="black")
-        self.btnEliminar.place(x=350,y=250,width=170, height=30 )
+        self.btnEliminar.place(x=440,y=250,width=170, height=30 )
 
         self.btnAgregar = Button(self, text="Agregar", command = self.mostrarVentanaAgregarCuenta, bg="#bfdaff", fg="black")
-        self.btnAgregar.place(x=100,y=250,width=170, height=30 )
+        self.btnAgregar.place(x=190,y=250,width=170, height=30 )
 
         self.btnEditar = Button(self, text="Editar", command = self.mostrarVentanaEditarCuentaB, bg="#bfdaff", fg="black")
-        self.btnEditar.place(x=600,y=250,width=170, height=30 )
+        self.btnEditar.place(x=690,y=250,width=170, height=30 )
                 
     def mostrasPronosticos(self):
 
@@ -149,18 +128,18 @@ class Ventana(Frame):
         self.grid.heading("col5", text="Id_Usuario", anchor=CENTER)
         self.grid.heading("col6", text="Id_Enfrent", anchor=CENTER)
 
-        self.grid.place(x=18, y=35, width=860, height=200)
+        self.grid.place(x=100, y=37, width=860, height=200)
 
         self.llenarDatosPronosticos()            
 
         self.btnEliminar = Button(self, text="Eliminar", command = self.eliminarPronostico, bg="#bfdaff", fg="black")
-        self.btnEliminar.place(x=350,y=250,width=170, height=30 )
+        self.btnEliminar.place(x=440,y=250,width=170, height=30 )
 
         self.btnAgregar = Button(self, text="Agregar", command = self.mostrarVentanaAgregarPronostico, bg="#bfdaff", fg="black")
-        self.btnAgregar.place(x=100,y=250,width=170, height=30 )
+        self.btnAgregar.place(x=190,y=250,width=170, height=30 )
 
         self.btnEditar = Button(self, text="Editar", command = self.mostrarVentanaEditarPronostico, bg="#bfdaff", fg="black")
-        self.btnEditar.place(x=600,y=250,width=170, height=30 )
+        self.btnEditar.place(x=690,y=250,width=170, height=30 )
 
         pass
 
@@ -172,16 +151,14 @@ class Ventana(Frame):
             messagebox.showwarning("Eliminar",'Debes seleccionar un elemento')            
         else:            
             valores = self.grid.item(selected, 'values')    
-            data = str(clave) +", "+ valores[0]+" "+ valores[1]
-            print(clave)
+            data = str(clave) +", "+ valores[0]+" "+ valores[1]            
             adv = messagebox.askquestion("Eliminar",'¿Deseas eliminar el registro seleccionado?\r'+data) 
             if adv==messagebox.YES:
                 cantidad = self.datos.eliminar_clienteSP(clave)
-                if cantidad==1:
+                if cantidad==0:
                     messagebox.showinfo("Eliminar", 'Registro eliminado correctamente')
                     self.limpiarGrid()
-                    self.llenarDatosClientes()
-                    print('Eliminado')
+                    self.llenarDatosClientes()                    
                 else:
                     messagebox.showinfo("Eliminar", 'No se ha podido eliminar')                                
 
@@ -202,7 +179,7 @@ class Ventana(Frame):
             adv = messagebox.askquestion("Eliminar",'¿Deseas eliminar la cuenta bancaria?\r'+'Termina en: '+data) 
             if adv==messagebox.YES:
                 cantidad = self.datos.eliminar_cuentaBSP(clave)
-                if cantidad==1:
+                if cantidad==0:
                     messagebox.showinfo("Eliminar", 'Cuenta bancaria eliminada correctamente')
                     self.limpiarGrid()
                     self.llenarDatosCuentas()
@@ -227,7 +204,7 @@ class Ventana(Frame):
             adv = messagebox.askquestion("Eliminar",'¿Deseas eliminar el pronostico?\r'+'Su ganancia es de: '+data)
             if adv==messagebox.YES:
                 cantidad = self.datos.eliminar_pronosticoSP(clave)
-                if cantidad==1:
+                if cantidad==0:
                     messagebox.showinfo("Eliminar", 'Pronostico eliminado correctamente')
                     self.limpiarGrid()
                     self.llenarDatosPronosticos()
@@ -260,7 +237,7 @@ class Ventana(Frame):
     #Crear la ventana principal
     def create_widgets(self):        
         frame1 = Frame(self, bg="")
-        frame1.place(x=0, y=0, width=880, height=30)
+        frame1.place(x=34, y=2, width=880, height=30)
 
         self.btnCliente = Button(frame1, text="Cliente", command=self.mostrarClientes, bg="#bfdaff", fg="black")
         self.btnCliente.place(x=30, y=2, width=80, height=30)
@@ -280,7 +257,7 @@ class Ventana(Frame):
     def mostrarVentanaAgregarCliente(self):
         ventana_agregar = Toplevel(self.master)
         ventana_agregar.title("Agregar Cliente")
-        ventana_agregar.geometry("400x600")
+        ventana_agregar.geometry("400x500")
 
         lbl_id = Label(ventana_agregar, text="ID:")        
         lbl_id.pack()
@@ -331,11 +308,6 @@ class Ventana(Frame):
         lbl_contrasena.pack()
         entry_contrasena = Entry(ventana_agregar)
         entry_contrasena.pack()
-
-        lbl_monto = Label(ventana_agregar, text="Monto:")
-        lbl_monto.pack()
-        entry_monto = Entry(ventana_agregar)
-        entry_monto.pack()
         
         btn_guardar = Button(ventana_agregar, text="Guardar", 
                              command=lambda: [self.guardarNuevoCliente(entry_id.get(), 
@@ -347,14 +319,15 @@ class Ventana(Frame):
                                                                       entry_ciudad.get(), 
                                                                       entry_provincia.get(), 
                                                                       entry_email.get(), 
-                                                                      entry_contrasena.get(), 
-                                                                      float(entry_monto.get())),
+                                                                      entry_contrasena.get()),
                                                 self.destruirVentana(ventana_agregar)])
         btn_guardar.pack()
 
     #Enviar datos a bd
-    def guardarNuevoCliente(self, id_usuario, nombre, apellido, telefono, cedula, edad, ciudad, provincia, email, contrasena, monto):            
-        self.datos.insertar_cliente(id_usuario, nombre, apellido, telefono, cedula, int(edad), ciudad, provincia, email, contrasena, float(monto))        
+    def guardarNuevoCliente(self, id_usuario, nombre, apellido, telefono, cedula, edad, ciudad, provincia, email, contrasena):            
+        self.datos.insertar_cliente(id_usuario, nombre, apellido, telefono, cedula, int(edad), ciudad, provincia, email, contrasena)
+        self.limpiarGrid()
+        self.llenarDatosClientes() 
 
     def mostrarVentanaAgregarCuenta(self):
         ventana_agregar_cuenta = Toplevel(self.master)
@@ -404,6 +377,8 @@ class Ventana(Frame):
     #Enviar datos a bd
     def guardarNuevaCuenta(self, numero_cuenta, tipo_cuenta, cedula_dueño, banco, id_usuario):
         self.datos.insertar_cuenta(numero_cuenta, tipo_cuenta, cedula_dueño, banco, id_usuario)
+        self.limpiarGrid()
+        self.llenarDatosCuentas() 
 
     def mostrarVentanaAgregarPronostico(self):
         ventana_agregar = Toplevel (self.master)
@@ -460,6 +435,8 @@ class Ventana(Frame):
     #Enviar datos a bd
     def guardarNuevoPronostico(self,id_pronostico,monto_apuesta,valor_multiplicativo,ganancia,fecha_apuesta,id_usuario,id_enfrentamiento):
         self.datos.insertar_pronostico(id_pronostico,monto_apuesta,valor_multiplicativo,ganancia,fecha_apuesta,id_usuario,id_enfrentamiento)
+        self.limpiarGrid()
+        self.llenarDatosPronosticos()
 
 
 #Sheyla
@@ -470,7 +447,7 @@ class Ventana(Frame):
         else:
             ventana_edicionCliente = Toplevel(self.master)
             ventana_edicionCliente.title("Editar Cliente")
-            ventana_edicionCliente.geometry("800x800")
+            ventana_edicionCliente.geometry("400x400")
             
             valores = self.grid.item(selected, 'values') 
 
@@ -547,11 +524,15 @@ class Ventana(Frame):
             "provincia": provincia,
             "email": email,
             "contraseña": contraseña
-            }
-            
-        self.datos.editar_cliente(cliente_id, nuevos_datos)   
-        self.limpiarGrid()
-        self.llenarDatosClientes()
+        }
+
+        cantidad = self.datos.editar_clienteSP(cliente_id, nuevos_datos)   
+        if cantidad==1:
+                    messagebox.showinfo("Actualizar", 'Registro actualizado correctamente')
+                    self.limpiarGrid()
+                    self.llenarDatosClientes()                    
+        else:
+            messagebox.showinfo("Actualizar", 'No se ha podido actualizar')        
     
     def mostrarVentanaEditarCuentaB(self):        
         selected = self.grid.focus()
@@ -560,7 +541,7 @@ class Ventana(Frame):
         else:
             ventana_edicionCuenta = Toplevel(self.master)
             ventana_edicionCuenta.title("Editar Cuenta Bancaria")
-            ventana_edicionCuenta.geometry("800x800")
+            ventana_edicionCuenta.geometry("400x200")
             
             valores = self.grid.item(selected, 'values')
             clave = self.grid.item(selected, 'text')
@@ -590,17 +571,20 @@ class Ventana(Frame):
             btnGuardarCambiosCuentaB.pack()                                    
 
     #Enviar datos a bd
-    def guardarCambiosCuentaB(self, tipoCuenta, cedula, banco, cuenta_ac):                     
+    def guardarCambiosCuentaB(self, tipoCuenta, cedula, banco, cuenta_ac):
         datos_cuenta= {
             "tipo de cuenta": tipoCuenta,            
             "cedula": cedula,            
             "banco": banco,            
         }
         
-        self.datos.editar_cuentaB(cuenta_ac, datos_cuenta)
-        messagebox.showinfo("Actualizar", 'Registro actualizado correctamente')
-        self.limpiarGrid()
-        self.llenarDatosCuentas()
+        cantidad = self.datos.editar_cuentaBSP(cuenta_ac, datos_cuenta)   
+        if cantidad==1:
+                    messagebox.showinfo("Actualizar", 'Registro actualizado correctamente')
+                    self.limpiarGrid()
+                    self.llenarDatosCuentas()                    
+        else:
+            messagebox.showinfo("Actualizar", 'No se ha podido actualizar') 
 
     def mostrarVentanaEditarPronostico(self):        
         selected = self.grid.focus()
@@ -609,7 +593,7 @@ class Ventana(Frame):
         else:
             ventana_edicionPronostico = Toplevel(self.master)
             ventana_edicionPronostico.title("Editar Pronostico")
-            ventana_edicionPronostico.geometry("800x800")
+            ventana_edicionPronostico.geometry("400x150")
             
             valores = self.grid.item(selected, 'values')
             clave = self.grid.item(selected, 'text')
@@ -627,18 +611,21 @@ class Ventana(Frame):
             entry_valorm.pack()
     
             btnGuardarCambiosPronostico= Button(ventana_edicionPronostico, text="Guardar Cambios", command=lambda: [self.guardarCambiosPronostico(entry_monto.get(),                                                                                                                                        
-                                                                                                                                            entry_valorm.get(),
-                                                                                                                                            clave), self.destruirVentana(ventana_edicionPronostico)],bg="#bfdaff", fg="black")
+                                                                                                                                                    entry_valorm.get(),
+                                                                                                                                                    clave), self.destruirVentana(ventana_edicionPronostico)],bg="#bfdaff", fg="black")
             btnGuardarCambiosPronostico.pack()                                    
 
     #Enviar datos a bd
     def guardarCambiosPronostico(self, monto, valorm, id_pronostico):                     
-        datos_cuenta= {
+        datos_pronosticos = {
             "monto": monto,            
-            "valorm": valorm,                       
+            "valormul": valorm,                       
         }
         
-        self.datos.editar_pronostico(id_pronostico, datos_cuenta)        
-        self.limpiarGrid()
-        messagebox.showinfo("Actualizar", 'Registro actualizado correctamente')
-        self.llenarDatosPronosticos()
+        cantidad = self.datos.editar_pronosticoSP(id_pronostico, datos_pronosticos)
+        if cantidad==1:
+                    messagebox.showinfo("Actualizar", 'Registro actualizado correctamente')
+                    self.limpiarGrid()
+                    self.llenarDatosPronosticos()                    
+        else:
+            messagebox.showinfo("Actualizar", 'No se ha podido actualizar') 
