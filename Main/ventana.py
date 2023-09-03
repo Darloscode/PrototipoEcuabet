@@ -45,8 +45,8 @@ class Ventana(Frame):
         self.grid.column("col6", width=90, anchor=CENTER)
         self.grid.column("col7", width=90, anchor=CENTER)
         self.grid.column("col8", width=200, anchor=CENTER)
-        self.grid.column("col9", width=90, anchor=CENTER)
-        self.grid.column("col10", width=40, anchor=CENTER)
+        self.grid.column("col9", width=80, anchor=CENTER)
+        self.grid.column("col10", width=50, anchor=CENTER)
 
         self.grid.heading("#0", text="Id", anchor=CENTER)
         self.grid.heading("col1", text="Nombre", anchor=CENTER)
@@ -74,7 +74,6 @@ class Ventana(Frame):
         self.btnEditar.place(x=690,y=250,width=170, height=30 )
      
     def mostrarCuentas(self): 
-
         self.eliminarColumnasGrid()
 
         self.grid = ttk.Treeview(columns=("col1", "col2", "col3", "col4", "col5"))        
@@ -142,6 +141,34 @@ class Ventana(Frame):
         self.btnEditar.place(x=690,y=250,width=170, height=30 )
 
         pass
+
+    def mostrarMovimientos(self):
+        self.eliminarColumnasGrid()
+
+        self.grid = ttk.Treeview(columns=("col1", "col2", "col3", "col4", "col5", "col6"))        
+
+        self.grid.column("#0", width=3, anchor=CENTER)
+        self.grid.column("col1", width=30, anchor=CENTER)
+        self.grid.column("col2", width=20, anchor=CENTER)
+        self.grid.column("col3", width=10, anchor=CENTER)
+        self.grid.column("col4", width=10, anchor=CENTER)
+        self.grid.column("col5", width=10, anchor=CENTER)
+        self.grid.column("col6", width=10, anchor=CENTER)
+
+        self.grid.heading("#0", text="Num_movi", anchor=CENTER)
+        self.grid.heading("col1", text="Tip_movi", anchor=CENTER)
+        self.grid.heading("col2", text="Estado", anchor=CENTER)
+        self.grid.heading("col3", text="Monto", anchor=CENTER)
+        self.grid.heading("col4", text="Fecha_gen", anchor=CENTER)
+        self.grid.heading("col5", text="Usuario", anchor=CENTER)
+        self.grid.heading("col6", text="Cuenta", anchor=CENTER)
+
+        self.grid.place(x=143, y=37, width=760, height=200)
+
+        self.llenarDatosMovimiento()
+
+        self.btnAgregar = Button(self, text="Agregar", command = self.mostrarVentanaAgregarMovimiento, bg="#bfdaff", fg="black")
+        self.btnAgregar.place(x=440,y=250,width=170, height=30 )        
 
     def eliminarCliente(self):
         selected = self.grid.focus()                        
@@ -233,6 +260,14 @@ class Ventana(Frame):
             else:
                 self.grid.insert("", END, text=d[0], values=(d[1],d[2],d[3],'Inactivo',d[5])) 
 
+    def llenarDatosMovimiento(self):
+        datos = self.datos.consulta_movimiento()
+        for d in datos:
+            if d[2] == 1:
+                self.grid.insert("", END, text=d[0], values=(d[1], 'Activo', d[3], d[4], d[5], d[6]))            
+            else:
+                self.grid.insert("", END, text=d[0], values=(d[1],'Inactivo', d[3], d[4], d[5], d[6])) 
+        
 
     #Crear la ventana principal
     def create_widgets(self):        
@@ -247,6 +282,9 @@ class Ventana(Frame):
 
         self.btnPronost = Button(frame1, text="Pronosticos", command = self.mostrasPronosticos, bg="#bfdaff", fg="black")
         self.btnPronost.place(x=280,y=2,width=130, height=30)
+        
+        self.btnPronost = Button(frame1, text="Movimientos Bancarios", command = self.mostrarMovimientos, bg="#bfdaff", fg="black")
+        self.btnPronost.place(x=435,y=2,width=170, height=30)
 
     #Destruir ventana creada
     def destruirVentana(self, ventana):
@@ -325,9 +363,13 @@ class Ventana(Frame):
 
     #Enviar datos a bd
     def guardarNuevoCliente(self, id_usuario, nombre, apellido, telefono, cedula, edad, ciudad, provincia, email, contrasena):            
-        self.datos.insertar_cliente(id_usuario, nombre, apellido, telefono, cedula, int(edad), ciudad, provincia, email, contrasena)
-        self.limpiarGrid()
-        self.llenarDatosClientes() 
+        cantidad = self.datos.insertar_cliente(id_usuario, nombre, apellido, telefono, cedula, int(edad), ciudad, provincia, email, contrasena)
+        if cantidad==0:
+            messagebox.showinfo("Ingresar", 'Registro ingresado correctamente')
+            self.limpiarGrid()
+            self.llenarDatosClientes()
+        else:
+            messagebox.showinfo("Ingresar", 'No se ha podido Ingresar')          
 
     def mostrarVentanaAgregarCuenta(self):
         ventana_agregar_cuenta = Toplevel(self.master)
@@ -376,9 +418,13 @@ class Ventana(Frame):
     
     #Enviar datos a bd
     def guardarNuevaCuenta(self, numero_cuenta, tipo_cuenta, cedula_dueño, banco, id_usuario):
-        self.datos.insertar_cuenta(numero_cuenta, tipo_cuenta, cedula_dueño, banco, id_usuario)
-        self.limpiarGrid()
-        self.llenarDatosCuentas() 
+        cantidad = self.datos.insertar_cuenta(numero_cuenta, tipo_cuenta, cedula_dueño, banco, id_usuario)
+        if cantidad==0:
+            messagebox.showinfo("Ingresar", 'Registro ingresado correctamente')
+            self.limpiarGrid()
+            self.llenarDatosCuentas()
+        else:
+            messagebox.showinfo("Ingresar", 'No se ha podido Ingresar')         
 
     def mostrarVentanaAgregarPronostico(self):
         ventana_agregar = Toplevel (self.master)
@@ -434,9 +480,13 @@ class Ventana(Frame):
 
     #Enviar datos a bd
     def guardarNuevoPronostico(self,id_pronostico,monto_apuesta,valor_multiplicativo,ganancia,fecha_apuesta,id_usuario,id_enfrentamiento):
-        self.datos.insertar_pronostico(id_pronostico,monto_apuesta,valor_multiplicativo,ganancia,fecha_apuesta,id_usuario,id_enfrentamiento)
-        self.limpiarGrid()
-        self.llenarDatosPronosticos()
+        cantidad = self.datos.insertar_pronostico(id_pronostico,monto_apuesta,valor_multiplicativo,ganancia,fecha_apuesta,id_usuario,id_enfrentamiento)
+        if cantidad==0:
+            messagebox.showinfo("Ingresar", 'Registro ingresado correctamente')
+            self.limpiarGrid()
+            self.llenarDatosPronosticos()                    
+        else:
+            messagebox.showinfo("Ingresar", 'No se ha podido Ingresar')                 
 
 
 #Sheyla
@@ -527,7 +577,7 @@ class Ventana(Frame):
         }
 
         cantidad = self.datos.editar_clienteSP(cliente_id, nuevos_datos)   
-        if cantidad==1:
+        if cantidad==0:
                     messagebox.showinfo("Actualizar", 'Registro actualizado correctamente')
                     self.limpiarGrid()
                     self.llenarDatosClientes()                    
@@ -579,7 +629,7 @@ class Ventana(Frame):
         }
         
         cantidad = self.datos.editar_cuentaBSP(cuenta_ac, datos_cuenta)   
-        if cantidad==1:
+        if cantidad==0:
                     messagebox.showinfo("Actualizar", 'Registro actualizado correctamente')
                     self.limpiarGrid()
                     self.llenarDatosCuentas()                    
@@ -623,9 +673,60 @@ class Ventana(Frame):
         }
         
         cantidad = self.datos.editar_pronosticoSP(id_pronostico, datos_pronosticos)
-        if cantidad==1:
+        if cantidad==0:
                     messagebox.showinfo("Actualizar", 'Registro actualizado correctamente')
                     self.limpiarGrid()
                     self.llenarDatosPronosticos()                    
         else:
             messagebox.showinfo("Actualizar", 'No se ha podido actualizar') 
+
+
+#EXTRA
+    def mostrarVentanaAgregarMovimiento(self):
+        ventana_agregar = Toplevel(self.master)
+        ventana_agregar.title("Agregar Movimiento Bancario")
+        ventana_agregar.geometry("400x500")
+
+        lbl_id = Label(ventana_agregar, text="Num_movimiento:")        
+        lbl_id.pack()
+        entry_id = Entry(ventana_agregar)
+        entry_id.pack()
+
+        lbl_tipo = Label(ventana_agregar, text="Tipo de movimiento:")
+        lbl_tipo.pack()
+        entry_tipo = Entry(ventana_agregar)
+        entry_tipo.pack()
+
+        lbl_monto = Label(ventana_agregar, text="Monto:")
+        lbl_monto.pack()
+        entry_monto = Entry(ventana_agregar)
+        entry_monto.pack()
+
+        lbl_usuario = Label(ventana_agregar, text="Usuario:")
+        lbl_usuario.pack()
+        entry_usuario = Entry(ventana_agregar)
+        entry_usuario.pack()
+
+        lbl_cuenta = Label(ventana_agregar, text="Num_cuenta:")
+        lbl_cuenta.pack()
+        entry_cuenta = Entry(ventana_agregar)
+        entry_cuenta.pack()
+        
+        btn_guardar = Button(ventana_agregar, text="Guardar", 
+                             command=lambda: [self.guardarNuevoMovimiento(entry_id.get(), 
+                                                                      entry_tipo.get(), 
+                                                                      entry_monto.get(), 
+                                                                      entry_usuario.get(),
+                                                                      entry_cuenta.get()),
+                                                self.destruirVentana(ventana_agregar)])
+        btn_guardar.pack()        
+
+    #Enviar datos a bd
+    def guardarNuevoMovimiento(self, id_mov, tipo, monto, usuario, cuenta):
+        cantidad = self.datos.insertar_movimiento(id_mov, tipo, monto, usuario, cuenta)
+        if cantidad==0:
+            messagebox.showinfo("Agregar", 'Registro ingresado correctamente')
+            self.limpiarGrid()
+            self.llenarDatosMovimiento()
+        else:
+            messagebox.showinfo("Ingresar", 'No se ha podido Ingresar')          

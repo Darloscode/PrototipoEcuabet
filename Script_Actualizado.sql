@@ -30,7 +30,7 @@ foreign key (id_usuario) references cliente(id_usuario)
 create table movimiento_bancario(
 num_movimiento varchar(5) not null,
 tipo_movimiento varchar(25) not null,
-estado bool default true , 
+estado bool default true, 
 monto float not null, 
 fecha_generacion date not null, 
 id_usuario varchar(5) not null,
@@ -422,6 +422,83 @@ BEGIN
 END //
 DELIMITER ;
 
+DELIMITER //
+CREATE PROCEDURE agregarMovimiento(
+	IN id_mov varchar(5),
+	IN tipo varchar(25),
+	IN monto float, 
+	IN usuario varchar(5),
+	IN cuenta varchar(5))
+BEGIN
+    START TRANSACTION;
+    INSERT INTO movimiento_bancario (num_movimiento, tipo_movimiento, monto, fecha_generacion, id_usuario, num_cuenta)
+    VALUES (id_mov, tipo, monto, curdate(), usuario, cuenta);
+    COMMIT;
+END //
+DELIMITER ;
+
+
+DELIMITER /
+CREATE PROCEDURE editarCliente(
+	IN id varchar(5),
+    IN nombre VARCHAR(30),
+    IN apellido VARCHAR(30),
+    IN telefono VARCHAR(10),
+    IN cedula VARCHAR(10),
+    IN ciudad_residencia VARCHAR(25),
+    IN provincia_residencia VARCHAR(25),
+    IN email VARCHAR(250),
+    IN password VARCHAR(10))
+BEGIN
+	START TRANSACTION;
+    UPDATE cliente
+    SET nombre = nombre,
+        apellido = apellido,
+        telefono = telefono,
+        cedula = cedula,
+        ciudad_residencia = ciudad_residencia,
+        provincia_residencia = provincia_residencia,
+        email = email,
+        password = password 
+        WHERE id_usuario = id;
+        COMMIT;
+END /
+DELIMITER ;
+
+DELIMITER /
+CREATE PROCEDURE editarCuentaBancaria(
+    IN id_cuenta varchar(5),
+    IN tipoCuenta VARCHAR(25),
+    IN cedula VARCHAR(10),
+    IN banco VARCHAR(100))
+BEGIN
+	START TRANSACTION;	
+    UPDATE cuenta_bancaria
+    SET tipo_cuenta = tipoCuenta,
+        cedula_dueño = cedula,
+        banco = banco,
+        estado = estado
+    WHERE num_cuenta = id_cuenta;
+    COMMIT;
+END /
+DELIMITER ;
+
+DELIMITER /
+CREATE PROCEDURE editarPronostico(
+	IN id_pro VARCHAR(5),
+    IN monto FLOAT,
+    IN valorm FLOAT)
+BEGIN
+	START TRANSACTION;
+	UPDATE pronostico_deportivo
+    SET monto_apuesta = monto,
+        valor_multiplicativo = valorm
+    WHERE id_pronostico = id_pro;
+    COMMIT;
+END /
+DELIMITER ;
+
+
 
 #View
 CREATE VIEW mostrarMovimientos(Cedula, Nombre, Apellido, Tipo_de_movimiento, Monto, Banco) AS
@@ -477,6 +554,26 @@ CREATE VIEW pronosticos_por_deporte AS
     ORDER BY
         jd.tipo_deporte;
 
+
+#Triggers
+DELIMITER //
+CREATE TRIGGER movimiento_trigger
+AFTER INSERT ON movimiento_bancario
+FOR EACH ROW
+BEGIN
+	DECLARE monto_actual FLOAT;
+    DECLARE tipo VARCHAR(25);
+    
+    SELECT monto INTO monto_actual FROM cliente WHERE id_usuario = NEW.id_usuario; 
+    
+    IF NEW.tipo_movimiento="Depósito" THEN
+		UPDATE cliente SET monto =(monto_actual)+NEW.monto  WHERE id_usuario = NEW.id_usuario;
+    ELSE 
+		UPDATE cliente SET monto =(monto_actual)-NEW.monto  WHERE id_usuario = NEW.id_usuario;
+	END IF;
+END;
+//
+DELIMITER ;
 
 
 #Usuarios
