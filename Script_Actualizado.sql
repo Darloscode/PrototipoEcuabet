@@ -1,7 +1,6 @@
+drop database proyecto;
 create database proyecto;
 use proyecto;
-
-drop database proyecto;
 
 create table cliente(
 id_usuario varchar(5) primary key not null, 
@@ -113,17 +112,19 @@ create table paradas(
 
 
 #Insertando datos en tabla Cliente
-INSERT INTO cliente (id_usuario, nombre, apellido, telefono, cedula, edad, ciudad_residencia, provincia_residencia, email, password) VALUES 
-    ('10001', 'Juan', 'Pérez', '5551234567', '1234567890', 25, 'Madrid', 'Madrid', 'juan.perez@example.com', '32149875'),
-    ('10002', 'María', 'Gómez', '4449876543', '0987654321', 30, 'Barcelona', 'Barcelona', 'maria.gomez@example.com', '98765432'),
-    ('10003', 'Carlos', 'Rodríguez', '3336549870', '1357924680', 22, 'Valencia', 'Valencia', 'carlos.rodriguez@example.com', '56789012'),
-    ('10004', 'Laura', 'López', '2225678901', '8642097531', 28, 'Sevilla', 'Sevilla', 'laura.lopez@example.com', '24681357'),
-    ('10005', 'Pedro', 'Martínez', '7772345678', '2468135790', 32, 'Málaga', 'Málaga', 'pedro.martinez@example.com', '13579246'),
-    ('10006', 'Ana', 'Fernández', '6667890123', '0246813579', 20, 'Bilbao', 'Vizcaya', 'ana.fernandez@example.com', '02468135'),
-    ('10007', 'Isabel', 'Ramírez', '8889012345', '9876543210', 27, 'Zaragoza', 'Zaragoza', 'isabel.ramirez@example.com',  '98765432'),
-    ('10008', 'David', 'Sánchez', '9993456789', '0123456789', 24, 'Alicante', 'Alicante', 'david.sanchez@example.com', '01234567'),
-    ('10009', 'Paula', 'Torres', '1115678901', '9876543210', 29, 'Palma de Mallorca', 'Islas Baleares', 'paula.torres@example.com', '98765432'),
-    ('10010', 'Sergio', 'Ortega', '2228901234', '1234567890', 26, 'Córdoba', 'Córdoba', 'sergio.ortega@example.com', '12345678');
+INSERT INTO cliente (id_usuario, nombre, apellido, telefono, cedula, edad, ciudad_residencia, provincia_residencia, email, password, monto) VALUES 
+    ('10001', 'Juan', 'Pérez', '5551234567', '1234567890', 25, 'Madrid', 'Madrid', 'juan.perez@example.com', '32149875', 2300),
+    ('10002', 'María', 'Gómez', '4449876543', '0987654321', 30, 'Barcelona', 'Barcelona', 'maria.gomez@example.com', '98765432', 1300),
+    ('10003', 'Carlos', 'Rodríguez', '3336549870', '1357924680', 22, 'Valencia', 'Valencia', 'carlos.rodriguez@example.com', '56789012', 4300),
+    ('10004', 'Laura', 'López', '2225678901', '8642097531', 28, 'Sevilla', 'Sevilla', 'laura.lopez@example.com', '24681357', 2340),
+    ('10005', 'Pedro', 'Martínez', '7772345678', '2468135790', 32, 'Málaga', 'Málaga', 'pedro.martinez@example.com', '13579246', 2800),
+    ('10006', 'Ana', 'Fernández', '6667890123', '0246813579', 20, 'Bilbao', 'Vizcaya', 'ana.fernandez@example.com', '02468135', 1200),
+    ('10007', 'Isabel', 'Ramírez', '8889012345', '9876543210', 27, 'Zaragoza', 'Zaragoza', 'isabel.ramirez@example.com',  '98765432', 300),
+    ('10008', 'David', 'Sánchez', '9993456789', '0123456789', 24, 'Alicante', 'Alicante', 'david.sanchez@example.com', '01234567', 4341),
+    ('10009', 'Paula', 'Torres', '1115678901', '9876543210', 29, 'Palma de Mallorca', 'Islas Baleares', 'paula.torres@example.com', '98765432', 300),
+    ('10010', 'Sergio', 'Ortega', '2228901234', '1234567890', 26, 'Córdoba', 'Córdoba', 'sergio.ortega@example.com', '12345678', 9200),
+    ('-1', 'ZUSUARIO', 'ZUSUARIO', '000000000', '000000000', 19, '------', '------', '------', '------', 0);
+
 
 #Insertando datos en tabla cuenta_bancaria
 INSERT INTO cuenta_bancaria (num_cuenta, tipo_cuenta, cedula_dueño, banco, estado, id_usuario) VALUES 
@@ -136,7 +137,7 @@ INSERT INTO cuenta_bancaria (num_cuenta, tipo_cuenta, cedula_dueño, banco, esta
     ('C007', 'Ahorros', '9876543210', 'BANCO CENTRAL DEL ECUADOR', true, '10007'),
     ('C008', 'Corriente', '0123456789', 'Banco Pichincha', true, '10008'),
     ('C009', 'Ahorros', '9876543210', 'Banco Guayaquil', true, '10009'),
-    ('C010', 'Corriente', '1234567890', 'PRODUBANCO', true, '10010');
+    ('C010', 'Corriente', '1234567890', 'PRODUBANCO', true, '10010');    
 
 #Insertando datos en tabla movimiento_bancario
 INSERT INTO movimiento_bancario (num_movimiento, tipo_movimiento, estado, monto, fecha_generacion, id_usuario, num_cuenta) VALUES 
@@ -521,6 +522,7 @@ CREATE VIEW mostrarPremios(Usuario, Nombre_Sorteo, Cupon_Ganador, Premio, Fecha_
     FROM cupones AS c JOIN paradas AS p 
     ON c.id_cupon = p.cupon_ganador;
     
+    
 CREATE VIEW juegos_ganados_por_equipo AS
     SELECT 
         d.tipo_deporte,
@@ -555,6 +557,7 @@ CREATE VIEW pronosticos_por_deporte AS
         jd.tipo_deporte;
 
 
+
 #Triggers
 DELIMITER //
 CREATE TRIGGER movimiento_trigger
@@ -574,6 +577,35 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+
+DELIMITER //
+CREATE TRIGGER estado_cuenta_trigger
+AFTER INSERT ON movimiento_bancario
+FOR EACH ROW
+BEGIN
+    UPDATE cuenta_bancaria cb
+    SET cb.estado = (SELECT COUNT(*) > 0 
+    FROM movimiento_bancario mb WHERE mb.num_cuenta = cb.num_cuenta)
+    WHERE cb.num_cuenta = NEW.num_cuenta;
+END;
+//
+DELIMITER ;
+
+
+DELIMITER //
+CREATE TRIGGER cliente_trigger
+BEFORE DELETE ON cliente
+FOR EACH ROW
+BEGIN
+    UPDATE cuenta_bancaria SET id_usuario = '-1' WHERE id_usuario = OLD.id_usuario;
+    UPDATE movimiento_bancario SET id_usuario = '-1' WHERE id_usuario = OLD.id_usuario;
+    UPDATE pronostico_deportivo SET id_usuario = '-1' WHERE id_usuario = OLD.id_usuario;
+    UPDATE cupones SET nombreDeUsuario = '-1' WHERE nombreDeUsuario = OLD.id_usuario;
+END;
+//
+DELIMITER ;
+
 
 
 #Usuarios
@@ -608,4 +640,3 @@ GRANT SELECT ON proyecto.mostrarMovimientos TO 'contable'@'%';
 GRANT EXECUTE ON PROCEDURE proyecto.eliminarcliente TO 'coordinador'@'%';
 
 #SELECT User, Host FROM mysql.user;
-

@@ -18,7 +18,7 @@ class Base:
     #Carlos 
     def consulta_cliente(self):
         sql = self.cnn.cursor()
-        sql.execute("SELECT * FROM cliente ORDER BY ASC")
+        sql.execute("SELECT * FROM cliente ORDER BY id_usuario ASC")
         datos = sql.fetchall()
         sql.close()    
         return datos
